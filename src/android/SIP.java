@@ -47,13 +47,15 @@ public class SIP extends CordovaPlugin {
 
     private void callSip(String number, CallbackContext callbackContext) {
 
+      final CallbackContext cc = callbackContext;
+
       try {
         SipAudioCall.Listener listener = new SipAudioCall.Listener() {
 
           @Override
           public void onCallEstablished(SipAudioCall call) {
               call.startAudio();
-              callbackContext.success("Llamada establecidad");
+              cc.success("Llamada establecida");
           }
 
           @Override
@@ -61,7 +63,7 @@ public class SIP extends CordovaPlugin {
           }
         };
 
-        call = mSipManager.makeAudioCall(mSipProfile.getUriString(), "sip:" + number + mSipProfile.getDomain() + ";user=phone", listener, 30);
+        call = mSipManager.makeAudioCall(mSipProfile.getUriString(), "sip:" + number + mSipProfile.getSipDomain() + ";user=phone", listener, 30);
       }
       catch (SipException e) {
         callbackContext.error("error " + e.toString());

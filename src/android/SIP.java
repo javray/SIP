@@ -23,6 +23,7 @@ import android.net.sip.SipRegistrationListener;
 
 public class SIP extends CordovaPlugin {
 
+    private Context mContext;
     private boolean mRingbackToneEnabled = true;
     private boolean mRingtoneEnabled = true;
     private Ringtone mRingtone;

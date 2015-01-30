@@ -45,6 +45,47 @@ public class SIP extends CordovaPlugin {
       }
     }
 
+    private void callSip(String number, CallbackContext callbackContext) {
+
+      try {
+        SipAudioCall.Listener listener = new SipAudioCall.Listener() {
+
+          @Override
+          public void onCallEstablished(SipAudioCall call) {
+              call.startAudio();
+              callbackContext.success("Llamada establecidad");
+          }
+
+          @Override
+          public void onCallEnded(SipAudioCall call) {
+          }
+        };
+
+        call = mSipManager.makeAudioCall(mSipProfile.getUriString(), "sip:" + number + mSipProfile.getDomain() + ";user=phone", listener, 30);
+      }
+      catch (SipException e) {
+        callbackContext.error("error " + e.toString());
+        if (call != null) {
+          call.close();
+        }
+      }
+    }
+
+    private void callSipEnd(CallbackContext callbackContext) {
+
+      if(call != null) {
+          try {
+            call.endCall();
+          } catch (SipException se) {
+            callbackContext.error("Error al finalizar la llamada " + se.toString());
+          }
+          call.close();
+      }
+      else {
+        callbackContext.error("No hay niguna llamada en curso");
+      }
+    }
+
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
 
@@ -54,6 +95,14 @@ public class SIP extends CordovaPlugin {
             String domain = args.getString(2);
 
             this.connectSip(user, pass, domain, callbackContext);
+        }
+        else if (action.equals("call")) {
+            String number = args.getString(0);
+
+            this.callSip(number, callbackContext);
+        }
+        else if (action.equals("callend")) {
+            this.callSipEnd(callbackContext);
         }
         /*
         else if (action.equals("disconnect")) {

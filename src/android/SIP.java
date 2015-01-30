@@ -53,12 +53,7 @@ public class SIP extends CordovaPlugin {
             String pass = args.getString(1);
             String domain = args.getString(2);
 
-            if (this.connectSip(user, pass, domain)) {
-              callbackContext.success("Connected");
-            }
-            else {
-              callbackContext.error("Not Connected");
-            }
+            this.connectSip(user, pass, domain, callbackContext);
         }
         /*
         else if (action.equals("disconnect")) {

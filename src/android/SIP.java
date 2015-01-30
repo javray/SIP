@@ -9,6 +9,12 @@ import org.json.JSONObject;
 
 import java.io.*;
 
+import android.content.Context;
+import android.media.AudioManager;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.media.ToneGenerator;
+
 import android.net.sip.SipManager;
 import android.net.sip.SipProfile;
 import android.net.sip.SipAudioCall;
@@ -17,9 +23,15 @@ import android.net.sip.SipRegistrationListener;
 
 public class SIP extends CordovaPlugin {
 
+    private boolean mRingbackToneEnabled = true;
+    private boolean mRingtoneEnabled = true;
+    private Ringtone mRingtone;
+    private ToneGenerator mRingbackTone;
+
     private SipManager mSipManager = null;
     private SipProfile mSipProfile = null;
     private SipAudioCall call = null;
+
 
     public SIP() {
     }
@@ -55,7 +67,13 @@ public class SIP extends CordovaPlugin {
           @Override
           public void onCallEstablished(SipAudioCall call) {
               call.startAudio();
+              stopRingbackTone();
               cc.success("Llamada establecida");
+          }
+
+          @Override
+          public void onRingingBack(call) {
+            startRingbackTone();
           }
 
           @Override
@@ -86,6 +104,36 @@ public class SIP extends CordovaPlugin {
       else {
         callbackContext.error("No hay niguna llamada en curso");
       }
+    }
+
+    private void setInCallMode() {
+        ((AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE))
+                .setMode(AudioManager.MODE_IN_CALL);
+    }
+
+    private void setSpeakerMode() {
+        ((AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE))
+                .setMode(AudioManager.MODE_NORMAL);
+    }
+
+    private synchronized void startRingbackTone() {
+        if (mRingbackTone == null) {
+            // The volume relative to other sounds in the stream
+            int toneVolume = 80;
+            mRingbackTone = new ToneGenerator(
+                    AudioManager.STREAM_MUSIC, toneVolume);
+        }
+        setInCallMode();
+        mRingbackTone.startTone(ToneGenerator.TONE_CDMA_LOW_PBX_L);
+    }
+
+    private synchronized void stopRingbackTone() {
+        if (mRingbackTone != null) {
+            mRingbackTone.stopTone();
+            setSpeakerMode();
+            mRingbackTone.release();
+            mRingbackTone = null;
+        }
     }
 
     @Override

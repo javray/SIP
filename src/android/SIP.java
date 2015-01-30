@@ -24,7 +24,7 @@ public class SIP extends CordovaPlugin {
     public SIP() {
     }
 
-    private boolean connectSip(String user, String pass, String domain) {
+    private connectSip(String user, String pass, String domain, CallbackContext callbackContext) {
 
       mSipManager = SipManager.newInstance(cordova.getActivity());
 
@@ -38,10 +38,10 @@ public class SIP extends CordovaPlugin {
 
         mSipManager.open(mSipProfile);
 
-        return true;
+        callbackContext.success("Connected");
       }
       catch (Exception e) {
-        return false;
+        callbackContext.error("Not Connected " + e.toString());
       }
     }
 

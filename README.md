@@ -1,4 +1,4 @@
-Mikrotik
+SIP
 ========
 
-Cordova Plugin for Mikrotik API
+Cordova Plugin for SIP

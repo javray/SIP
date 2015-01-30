@@ -26,7 +26,7 @@ public class SIP extends CordovaPlugin {
 
     private boolean connectSip(String user, String pass, String domain) {
 
-      mSipManager = SipManager.newInstance(this);
+      mSipManager = SipManager.newInstance(cordova.getActivity());
 
       try {
 

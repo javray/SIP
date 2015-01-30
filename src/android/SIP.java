@@ -63,7 +63,7 @@ public class SIP extends CordovaPlugin {
           }
         };
 
-        call = mSipManager.makeAudioCall(mSipProfile.getUriString(), "sip:" + number + mSipProfile.getSipDomain() + ";user=phone", listener, 30);
+        call = mSipManager.makeAudioCall(mSipProfile.getUriString(), "sip:" + number + "@" + mSipProfile.getSipDomain() + ";user=phone", listener, 30);
       }
       catch (SipException e) {
         callbackContext.error("error " + e.toString());

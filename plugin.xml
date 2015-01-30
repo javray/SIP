@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='utf-8'?>
+<plugin id="com.javray.SIP" version="0.0.1" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+    <name>SIP</name>
+    <description>Conector SIP</description>
+    <js-module name="SIP" src="www/SIP.js">
+        <clobbers target="cordova.plugins.SIP" />
+    </js-module>
+    <platform name="android">
+      <config-file target="res/xml/config.xml" parent="/*">
+        <feature name="SIP" >
+            <param name="android-package" value="com.javray.cordova.plugin.SIP"/>
+        </feature>
+      </config-file>
+      <source-file src="src/android/SIP.java" target-dir="src/com/javray/cordova/plugin/SIP" />
+    </platform>
+</plugin>

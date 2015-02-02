@@ -134,7 +134,7 @@ public class SIP extends CordovaPlugin {
         }
         setInCallMode();
         //mRingbackTone.startTone(ToneGenerator.TONE_CDMA_LOW_PBX_L);
-        mRingbackTone.startTone(ToneGenerator.ONE_CDMA_NETWORK_USA_RINGBACK);
+        mRingbackTone.startTone(ToneGenerator.TONE_CDMA_NETWORK_USA_RINGBACK);
     }
 
     private synchronized void stopRingbackTone() {

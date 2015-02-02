@@ -78,9 +78,7 @@ public class SIP extends CordovaPlugin {
 
           @Override
           public void onRingingBack(SipAudioCall call) {
-            Log.d("SAREMOVIL", "sip call ringing back: " + call);
             startRingbackTone();
-            Log.d("SAREMOVIL", "sip call ringing backend: " + call);
           }
 
           @Override
@@ -134,12 +132,9 @@ public class SIP extends CordovaPlugin {
             mRingbackTone = new ToneGenerator(
                     AudioManager.STREAM_MUSIC, toneVolume);
         }
-        Log.d("SAREMOVIL", "1. RingbackTone: " + mRingbackTone);
         setInCallMode();
-        Log.d("SAREMOVIL", "2. RingbackTone: " + mRingbackTone);
         //mRingbackTone.startTone(ToneGenerator.TONE_CDMA_LOW_PBX_L);
-        mRingbackTone.startTone(ToneGenerator.TONE_CDMA_CALL_SIGNAL_ISDN_PING_RING);
-        Log.d("SAREMOVIL", "3. RingbackTone: " + mRingbackTone);
+        mRingbackTone.startTone(ToneGenerator.ONE_CDMA_NETWORK_USA_RINGBACK);
     }
 
     private synchronized void stopRingbackTone() {

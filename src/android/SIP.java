@@ -21,6 +21,8 @@ import android.net.sip.SipAudioCall;
 import android.net.sip.SipException;
 import android.net.sip.SipRegistrationListener;
 
+import android.util.Log;
+
 public class SIP extends CordovaPlugin {
 
     private Context mContext;

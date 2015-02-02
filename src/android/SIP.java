@@ -37,6 +37,7 @@ public class SIP extends CordovaPlugin {
 
 
     public SIP() {
+      mContext = cordova.getActivity();
     }
 
     private void connectSip(String user, String pass, String domain, CallbackContext callbackContext) {

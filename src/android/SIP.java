@@ -67,8 +67,8 @@ public class SIP extends CordovaPlugin {
 
           @Override
           public void onCallEstablished(SipAudioCall call) {
-              call.startAudio();
               stopRingbackTone();
+              call.startAudio();
               cc.success("Llamada establecida");
           }
 

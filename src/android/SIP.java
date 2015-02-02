@@ -100,6 +100,8 @@ public class SIP extends CordovaPlugin {
 
     private void callSipEnd(CallbackContext callbackContext) {
 
+      stopRingbackTone();
+
       if(call != null) {
           try {
             call.endCall();
@@ -131,7 +133,7 @@ public class SIP extends CordovaPlugin {
                     AudioManager.STREAM_MUSIC, toneVolume);
         }
         Log.d("SAREMOVIL", "1. RingbackTone: " + mRingbackTone);
-        setInCallMode();
+        //setInCallMode();
         Log.d("SAREMOVIL", "2. RingbackTone: " + mRingbackTone);
         mRingbackTone.startTone(ToneGenerator.TONE_CDMA_LOW_PBX_L);
         Log.d("SAREMOVIL", "3. RingbackTone: " + mRingbackTone);

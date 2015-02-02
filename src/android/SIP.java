@@ -117,12 +117,12 @@ public class SIP extends CordovaPlugin {
 
     private void setInCallMode() {
         ((AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE))
-                .setMode(AudioManager.MODE_IN_CALL);
+                .setMode(AudioManager.MODE_IN_CALL).setSpeakerphoneOn(false);
     }
 
     private void setSpeakerMode() {
         ((AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE))
-                .setMode(AudioManager.MODE_NORMAL);
+                .setMode(AudioManager.MODE_NORMAL).setSpeakerphoneOn(true);
     }
 
     private synchronized void startRingbackTone() {

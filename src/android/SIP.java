@@ -137,7 +137,8 @@ public class SIP extends CordovaPlugin {
         Log.d("SAREMOVIL", "1. RingbackTone: " + mRingbackTone);
         setInCallMode();
         Log.d("SAREMOVIL", "2. RingbackTone: " + mRingbackTone);
-        mRingbackTone.startTone(ToneGenerator.TONE_CDMA_LOW_PBX_L);
+        //mRingbackTone.startTone(ToneGenerator.TONE_CDMA_LOW_PBX_L);
+        mRingbackTone.startTone(ToneGenerator.TONE_CDMA_CALL_SIGNAL_ISDN_PING_RING);
         Log.d("SAREMOVIL", "3. RingbackTone: " + mRingbackTone);
     }
 

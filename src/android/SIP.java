@@ -116,13 +116,15 @@ public class SIP extends CordovaPlugin {
     }
 
     private void setInCallMode() {
-        ((AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE))
-                .setMode(AudioManager.MODE_IN_CALL).setSpeakerphoneOn(false);
+      AudioManager am =  ((AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE));
+      am.setMode(AudioManager.MODE_IN_CALL);
+      am.setSpeakerphoneOn(false);
     }
 
     private void setSpeakerMode() {
-        ((AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE))
-                .setMode(AudioManager.MODE_NORMAL).setSpeakerphoneOn(true);
+      AudioManager am = ((AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE));
+      am.setMode(AudioManager.MODE_NORMAL);
+      am.setSpeakerphoneOn(true);
     }
 
     private synchronized void startRingbackTone() {

@@ -57,21 +57,33 @@ public class SIP extends CordovaPlugin {
 
           if (mSipManager.isOpened(mSipProfile.getUriString())) {
 
-            callbackContext.success("El perfil SIP ya está abierto");
+            //callbackContext.success("El perfil SIP ya está abierto");
+            pluginResult = new PluginResult(PluginResult.Status.OK, "El perfil SIP ya estaba abierto");
+            pluginResult.setKeepCallback(true);
+            callbackContext.sendPluginResult(pluginResult);
           }
           else {
 
             mSipManager.open(mSipProfile);
 
-            callbackContext.success("Perfil configurado");
+            //callbackContext.success("Perfil configurado");
+            pluginResult = new PluginResult(PluginResult.Status.OK, "Perfil configurado");
+            pluginResult.setKeepCallback(true);
+            callbackContext.sendPluginResult(pluginResult);
           }
         }
         catch (Exception e) {
-          callbackContext.error("Perfil no configurado" + e.toString());
+          //callbackContext.error("Perfil no configurado" + e.toString());
+          pluginResult = new PluginResult(PluginResult.Status.Error, "Perfil no configurado" + e.toString());
+          pluginResult.setKeepCallback(true);
+          callbackContext.sendPluginResult(pluginResult);
         }
       }
       else {
-        callbackContext.error("SIP no soportado");
+        //callbackContext.error("SIP no soportado");
+        pluginResult = new PluginResult(PluginResult.Status.Error, "SIP no soportado" + e.toString());
+        pluginResult.setKeepCallback(true);
+        callbackContext.sendPluginResult(pluginResult);
       }
     }
 

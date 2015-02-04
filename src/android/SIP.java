@@ -188,11 +188,16 @@ public class SIP extends CordovaPlugin {
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
 
         if (action.equals("connect")) {
-            String user = args.getString(0);
-            String pass = args.getString(1);
-            String domain = args.getString(2);
 
-            this.connectSip(user, pass, domain, callbackContext);
+            final String user = args.getString(0);
+            final String pass = args.getString(1);
+            final String domain = args.getString(2);
+
+            cordova.getThreadPool().execute(new Runnable() {
+              public void run() {
+                connectSip(user, pass, domain, callbackContext);
+              }
+            });
         }
         else if (action.equals("makecall")) {
             String number = args.getString(0);

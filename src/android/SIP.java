@@ -142,6 +142,7 @@ public class SIP extends CordovaPlugin {
             callbackContext.error("Error al finalizar la llamada " + se.toString());
           }
           call.close();
+          call = null;
           callbackContext.success("Llamada finalizada");
       }
       else {

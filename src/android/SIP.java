@@ -53,7 +53,7 @@ public class SIP extends CordovaPlugin {
         builder.setOutboundProxy(domain);
         mSipProfile = builder.build();
 
-        if (mSipProfile.isOpened(mSipProfile.getUriString())) {
+        if (mSipManager.isOpened(mSipProfile.getUriString())) {
 
           callbackContext.success("SipProfile already opened");
         }

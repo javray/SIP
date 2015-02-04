@@ -45,6 +45,8 @@ public class SIP extends CordovaPlugin {
 
       mSipManager = SipManager.newInstance(mContext);
 
+      PluginResult pluginResult = null;
+
       if (mSipManager.isVoipSupported(mContext)) {
 
         try {

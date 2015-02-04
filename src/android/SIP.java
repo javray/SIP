@@ -171,7 +171,7 @@ public class SIP extends CordovaPlugin {
                     AudioManager.STREAM_MUSIC, toneVolume);
         }
         setInCallMode();
-        if (mRingbackTone.startTone(ToneGenerator.TONE_SUP_RINGTONE)) {
+        if (mRingbackTone.startTone(ToneGenerator.TONE_SUP_RINGTONE, 1000)) {
           Log.d("SIP", "Tono iniciado");
         }
         else {

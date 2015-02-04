@@ -41,31 +41,37 @@ public class SIP extends CordovaPlugin {
 
     private void connectSip(String user, String pass, String domain, CallbackContext callbackContext) {
 
-      mSipManager = SipManager.newInstance(cordova.getActivity());
-
       mContext = cordova.getActivity();
 
-      try {
+      mSipManager = SipManager.newInstance(mContext);
 
-        SipProfile.Builder builder = new SipProfile.Builder(user, domain);
+      if (mSipManager.isVoipSupported(mContext)) {
 
-        builder.setPassword(pass);
-        builder.setOutboundProxy(domain);
-        mSipProfile = builder.build();
+        try {
 
-        if (mSipManager.isOpened(mSipProfile.getUriString())) {
+          SipProfile.Builder builder = new SipProfile.Builder(user, domain);
 
-          callbackContext.success("SipProfile already opened");
+          builder.setPassword(pass);
+          builder.setOutboundProxy(domain);
+          mSipProfile = builder.build();
+
+          if (mSipManager.isOpened(mSipProfile.getUriString())) {
+
+            callbackContext.success("El perfil SIP ya está abierto");
+          }
+          else {
+
+            mSipManager.open(mSipProfile);
+
+            callbackContext.success("Perfil configurado");
+          }
         }
-        else {
-
-          mSipManager.open(mSipProfile);
-
-          callbackContext.success("Connected");
+        catch (Exception e) {
+          callbackContext.error("Perfil no configurado" + e.toString());
         }
       }
-      catch (Exception e) {
-        callbackContext.error("Not Connected " + e.toString());
+      else {
+        callbackContext.error("SIP no soportado");
       }
     }
 
@@ -78,9 +84,9 @@ public class SIP extends CordovaPlugin {
           if (mSipProfile != null) {
               mSipManager.close(mSipProfile.getUriString());
           }
-          callbackContext.success("Disconnected");
+          callbackContext.success("Perfil cerrado");
         } catch (Exception e) {
-          callbackContext.error("Not Disconnected " + e.toString());
+          callbackContext.error("Perfil no cerrado " + e.toString());
         }
       }
     }
@@ -89,33 +95,38 @@ public class SIP extends CordovaPlugin {
 
       final CallbackContext cc = callbackContext;
 
-      try {
-        SipAudioCall.Listener listener = new SipAudioCall.Listener() {
+      if (call == null) {
+        try {
+          SipAudioCall.Listener listener = new SipAudioCall.Listener() {
 
-          @Override
-          public void onCallEstablished(SipAudioCall call) {
-              stopRingbackTone();
-              call.startAudio();
-              cc.success("Llamada establecida");
-          }
+            @Override
+            public void onCallEstablished(SipAudioCall call) {
+                stopRingbackTone();
+                call.startAudio();
+                cc.success("Llamada establecida");
+            }
 
-          @Override
-          public void onRingingBack(SipAudioCall call) {
-            startRingbackTone();
-          }
+            @Override
+            public void onRingingBack(SipAudioCall call) {
+              startRingbackTone();
+            }
 
-          @Override
-          public void onCallEnded(SipAudioCall call) {
-          }
-        };
+            @Override
+            public void onCallEnded(SipAudioCall call) {
+            }
+          };
 
-        call = mSipManager.makeAudioCall(mSipProfile.getUriString(), "sip:" + number + "@" + mSipProfile.getSipDomain() + ";user=phone", listener, 30);
-      }
-      catch (SipException e) {
-        callbackContext.error("error " + e.toString());
-        if (call != null) {
-          call.close();
+          call = mSipManager.makeAudioCall(mSipProfile.getUriString(), "sip:" + number + "@" + mSipProfile.getSipDomain() + ";user=phone", listener, 30);
         }
+        catch (SipException e) {
+          callbackContext.error("error " + e.toString());
+          if (call != null) {
+            call.close();
+          }
+        }
+      }
+      else {
+        callbackContext.error("Hay una llamada en curso");
       }
     }
 

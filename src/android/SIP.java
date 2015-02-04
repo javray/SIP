@@ -107,6 +107,7 @@ public class SIP extends CordovaPlugin {
 
             @Override
             public void onRingingBack(SipAudioCall call) {
+              Log.d("SIP", "onRingingBack");
               startRingbackTone();
             }
 

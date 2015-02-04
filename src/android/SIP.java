@@ -141,6 +141,7 @@ public class SIP extends CordovaPlugin {
             callbackContext.error("Error al finalizar la llamada " + se.toString());
           }
           call.close();
+          callbackContext.success("Llamada finalizada");
       }
       else {
         callbackContext.error("No hay niguna llamada en curso");

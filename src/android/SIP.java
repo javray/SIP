@@ -84,7 +84,7 @@ public class SIP extends CordovaPlugin {
       }
       else {
         //callbackContext.error("SIP no soportado");
-        pluginResult = new PluginResult(PluginResult.Status.ERROR, "SIP no soportado" + e.toString());
+        pluginResult = new PluginResult(PluginResult.Status.ERROR, "SIP no soportado");
         pluginResult.setKeepCallback(true);
         callbackContext.sendPluginResult(pluginResult);
       }

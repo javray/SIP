@@ -77,14 +77,14 @@ public class SIP extends CordovaPlugin {
         }
         catch (Exception e) {
           //callbackContext.error("Perfil no configurado" + e.toString());
-          pluginResult = new PluginResult(PluginResult.Status.Error, "Perfil no configurado" + e.toString());
+          pluginResult = new PluginResult(PluginResult.Status.ERROR, "Perfil no configurado" + e.toString());
           pluginResult.setKeepCallback(true);
           callbackContext.sendPluginResult(pluginResult);
         }
       }
       else {
         //callbackContext.error("SIP no soportado");
-        pluginResult = new PluginResult(PluginResult.Status.Error, "SIP no soportado" + e.toString());
+        pluginResult = new PluginResult(PluginResult.Status.ERROR, "SIP no soportado" + e.toString());
         pluginResult.setKeepCallback(true);
         callbackContext.sendPluginResult(pluginResult);
       }

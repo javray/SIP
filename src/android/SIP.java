@@ -113,6 +113,7 @@ public class SIP extends CordovaPlugin {
 
             @Override
             public void onCallEnded(SipAudioCall call) {
+                cc.success("Llamada finalizada");
             }
           };
 

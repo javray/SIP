@@ -192,10 +192,11 @@ public class SIP extends CordovaPlugin {
             final String user = args.getString(0);
             final String pass = args.getString(1);
             final String domain = args.getString(2);
+            final CallbackContext cc = callbackContext;
 
             cordova.getThreadPool().execute(new Runnable() {
               public void run() {
-                connectSip(user, pass, domain, callbackContext);
+                connectSip(user, pass, domain, cc);
               }
             });
         }

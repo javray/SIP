@@ -2,7 +2,6 @@ package com.javray.cordova.plugin;
 
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
-import org.apache.cordova.PluginResult;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,8 +45,6 @@ public class SIP extends CordovaPlugin {
 
       mSipManager = SipManager.newInstance(mContext);
 
-      PluginResult pluginResult = null;
-
       if (mSipManager.isVoipSupported(mContext)) {
 
         try {
@@ -60,33 +57,21 @@ public class SIP extends CordovaPlugin {
 
           if (mSipManager.isOpened(mSipProfile.getUriString())) {
 
-            //callbackContext.success("El perfil SIP ya está abierto");
-            pluginResult = new PluginResult(PluginResult.Status.OK, "El perfil SIP ya estaba abierto");
-            pluginResult.setKeepCallback(true);
-            callbackContext.sendPluginResult(pluginResult);
+            callbackContext.success("El perfil SIP ya está abierto");
           }
           else {
 
             mSipManager.open(mSipProfile);
 
-            //callbackContext.success("Perfil configurado");
-            pluginResult = new PluginResult(PluginResult.Status.OK, "Perfil configurado");
-            pluginResult.setKeepCallback(true);
-            callbackContext.sendPluginResult(pluginResult);
+            callbackContext.success("Perfil configurado");
           }
         }
         catch (Exception e) {
-          //callbackContext.error("Perfil no configurado" + e.toString());
-          pluginResult = new PluginResult(PluginResult.Status.ERROR, "Perfil no configurado" + e.toString());
-          pluginResult.setKeepCallback(true);
-          callbackContext.sendPluginResult(pluginResult);
+          callbackContext.error("Perfil no configurado" + e.toString());
         }
       }
       else {
-        //callbackContext.error("SIP no soportado");
-        pluginResult = new PluginResult(PluginResult.Status.ERROR, "SIP no soportado");
-        pluginResult.setKeepCallback(true);
-        callbackContext.sendPluginResult(pluginResult);
+        callbackContext.error("SIP no soportado");
       }
     }
 
@@ -203,17 +188,11 @@ public class SIP extends CordovaPlugin {
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
 
         if (action.equals("connect")) {
+            String user = args.getString(0);
+            String pass = args.getString(1);
+            String domain = args.getString(2);
 
-            final String user = args.getString(0);
-            final String pass = args.getString(1);
-            final String domain = args.getString(2);
-            final CallbackContext cc = callbackContext;
-
-            cordova.getThreadPool().execute(new Runnable() {
-              public void run() {
-                connectSip(user, pass, domain, cc);
-              }
-            });
+            this.connectSip(user, pass, domain, callbackContext);
         }
         else if (action.equals("makecall")) {
             String number = args.getString(0);

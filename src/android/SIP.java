@@ -83,7 +83,9 @@ public class SIP extends CordovaPlugin {
         try {
           if (mSipProfile != null) {
               mSipManager.close(mSipProfile.getUriString());
+              mSipProfile = null;
           }
+          mSipManager = null;
           callbackContext.success("Perfil cerrado");
         } catch (Exception e) {
           callbackContext.error("Perfil no cerrado " + e.toString());
@@ -93,8 +95,6 @@ public class SIP extends CordovaPlugin {
 
     private void callSip(String number, CallbackContext callbackContext) {
 
-      final CallbackContext cc = callbackContext;
-
       if (call == null) {
         try {
           SipAudioCall.Listener listener = new SipAudioCall.Listener() {
@@ -103,7 +103,6 @@ public class SIP extends CordovaPlugin {
             public void onCallEstablished(SipAudioCall call) {
                 stopRingbackTone();
                 call.startAudio();
-                cc.success("Llamada establecida");
             }
 
             @Override
@@ -113,11 +112,12 @@ public class SIP extends CordovaPlugin {
 
             @Override
             public void onCallEnded(SipAudioCall call) {
-                cc.success("Llamada finalizada");
             }
           };
 
           call = mSipManager.makeAudioCall(mSipProfile.getUriString(), "sip:" + number + "@" + mSipProfile.getSipDomain() + ";user=phone", listener, 30);
+
+          callbackContext.success("Llamada enviada");
         }
         catch (SipException e) {
           callbackContext.error("error " + e.toString());

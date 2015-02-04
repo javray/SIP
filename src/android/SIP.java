@@ -53,12 +53,35 @@ public class SIP extends CordovaPlugin {
         builder.setOutboundProxy(domain);
         mSipProfile = builder.build();
 
-        mSipManager.open(mSipProfile);
+        if (mSipProfile.isOpened(mSipProfile.getUriString())) {
 
-        callbackContext.success("Connected");
+          callbackContext.success("SipProfile already opened");
+        }
+        else {
+
+          mSipManager.open(mSipProfile);
+
+          callbackContext.success("Connected");
+        }
       }
       catch (Exception e) {
         callbackContext.error("Not Connected " + e.toString());
+      }
+    }
+
+    private void disconnectSip(CallbackContext callbackContext) {
+      if (call != null) {
+          call.close();
+      }
+      if (mSipManager != null) {
+        try {
+          if (mSipProfile != null) {
+              mSipManager.close(mSipProfile.getUriString());
+          }
+          callbackContext.success("Disconnected");
+        } catch (Exception e) {
+          callbackContext.error("Not Disconnected " + e.toString());
+        }
       }
     }
 
@@ -133,7 +156,6 @@ public class SIP extends CordovaPlugin {
                     AudioManager.STREAM_MUSIC, toneVolume);
         }
         setInCallMode();
-        //mRingbackTone.startTone(ToneGenerator.TONE_CDMA_LOW_PBX_L);
         mRingbackTone.startTone(ToneGenerator.TONE_SUP_RINGTONE);
 
     }
@@ -164,6 +186,9 @@ public class SIP extends CordovaPlugin {
         }
         else if (action.equals("endcall")) {
             this.callSipEnd(callbackContext);
+        }
+        else if (action.equals("disconnect")) {
+            this.disconnectSip(callbackContext);
         }
 
         return false;

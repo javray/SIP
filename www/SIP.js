@@ -15,4 +15,8 @@ SIP.prototype.endCall = function(success, error) {
     exec(success, error, "SIP", "endcall", []);
 };
 
+SIP.prototype.disconnect = function(success, error) {
+    exec(success, error, "SIP", "disconnect", []);
+};
+
 module.exports = new SIP();

@@ -22,7 +22,6 @@ import android.net.sip.SipException;
 import android.net.sip.SipRegistrationListener;
 
 import android.util.Log;
-import android.os.SystemClock;
 
 public class SIP extends CordovaPlugin {
 
@@ -155,7 +154,6 @@ public class SIP extends CordovaPlugin {
     private void setInCallMode() {
       AudioManager am =  ((AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE));
       am.setMode(AudioManager.MODE_IN_CALL);
-      //SystemClock.sleep(2000);
       Log.d("SIP", "Speaker: " + am.isSpeakerphoneOn());
       am.setSpeakerphoneOn(false);
       Log.d("SIP", "Speaker: " + am.isSpeakerphoneOn());
@@ -168,13 +166,13 @@ public class SIP extends CordovaPlugin {
     }
 
     private synchronized void startRingbackTone() {
+        setInCallMode();
         if (mRingbackTone == null) {
             // The volume relative to other sounds in the stream
             int toneVolume = 80;
             mRingbackTone = new ToneGenerator(
-                    AudioManager.STREAM_SYSTEM, toneVolume);
+                    AudioManager.STREAM_MUSIC, toneVolume);
         }
-        setInCallMode();
         if (mRingbackTone.startTone(ToneGenerator.TONE_SUP_RINGTONE)) {
           Log.d("SIP", "Tono iniciado");
         }

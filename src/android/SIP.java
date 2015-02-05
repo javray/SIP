@@ -22,6 +22,7 @@ import android.net.sip.SipException;
 import android.net.sip.SipRegistrationListener;
 
 import android.util.Log;
+import android.os.Handler;
 
 public class SIP extends CordovaPlugin {
 
@@ -153,10 +154,15 @@ public class SIP extends CordovaPlugin {
 
     private void setInCallMode() {
       AudioManager am =  ((AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE));
-      Log.d("SIP", "Speaker: " + am.isSpeakerphoneOn());
-      am.setSpeakerphoneOn(false);
-      Log.d("SIP", "Speaker: " + am.isSpeakerphoneOn());
       am.setMode(AudioManager.MODE_IN_CALL);
+      Handler handler = new Handler(); 
+      handler.postDelayed(new Runnable() { 
+          public void run() { 
+            Log.d("SIP", "Speaker: " + am.isSpeakerphoneOn());
+            am.setSpeakerphoneOn(false);
+            Log.d("SIP", "Speaker: " + am.isSpeakerphoneOn());
+          } 
+      }, 2000); 
     }
 
     private void setSpeakerMode() {

@@ -1,5 +1,6 @@
 package com.javray.cordova.plugin;
 
+import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CordovaWebView;
 import org.apache.cordova.CallbackContext;
@@ -36,10 +37,17 @@ public class SIP extends CordovaPlugin {
     private SipProfile mSipProfile = null;
     private SipAudioCall call = null;
 
-    final CordovaWebView appView = webView;
+    final CordovaWebView appView = null;
 
 
     public SIP() {
+    }
+
+    public void initialize(CordovaInterface cordova, CordovaWebView webView) {
+
+      super.initialize(cordova, webView);
+
+      appView = webView;
     }
 
     private void connectSip(String user, String pass, String domain, CallbackContext callbackContext) {
@@ -104,15 +112,15 @@ public class SIP extends CordovaPlugin {
 
             @Override
             public void onCallEstablished(SipAudioCall call) {
-                appView.sendJavascript("cordova.fireWindowEvent('callEstablished', {})");
                 stopRingbackTone();
                 call.startAudio();
+                appView.sendJavascript("cordova.fireWindowEvent('callEstablished', {})");
             }
 
             @Override
             public void onRingingBack(SipAudioCall call) {
-              appView.sendJavascript("cordova.fireWindowEvent('ringingBack', {})");
               startRingbackTone();
+              appView.sendJavascript("cordova.fireWindowEvent('ringingBack', {})");
             }
 
             @Override

@@ -28,5 +28,6 @@
           <uses-feature android:name="android.hardware.microphone" android:required="true" />
           <uses-feature android:name="android.software.sip" android:required="true" />
       </config-file>
+      <preference name="android-targetSdkVersion" value="20" />
     </platform>
 </plugin>

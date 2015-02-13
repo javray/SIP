@@ -35,6 +35,8 @@ public class SIP extends CordovaPlugin {
     private SipProfile mSipProfile = null;
     private SipAudioCall call = null;
 
+    final CordovaWebView appView = webView;
+
 
     public SIP() {
     }
@@ -101,18 +103,20 @@ public class SIP extends CordovaPlugin {
 
             @Override
             public void onCallEstablished(SipAudioCall call) {
+                appView.sendJavascript("cordova.fireWindowEvent('callEstablished', {})");
                 stopRingbackTone();
                 call.startAudio();
             }
 
             @Override
             public void onRingingBack(SipAudioCall call) {
-              Log.d("SIP", "onRingingBack");
+              appView.sendJavascript("cordova.fireWindowEvent('ringingBack', {})");
               startRingbackTone();
             }
 
             @Override
             public void onCallEnded(SipAudioCall call) {
+              appView.sendJavascript("cordova.fireWindowEvent('callEnd', {})");
             }
           };
 

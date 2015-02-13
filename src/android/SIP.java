@@ -1,6 +1,7 @@
 package com.javray.cordova.plugin;
 
 import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.CordovaWebView;
 import org.apache.cordova.CallbackContext;
 
 import org.json.JSONArray;

@@ -29,4 +29,13 @@
           <uses-feature android:name="android.software.sip" android:required="true" />
       </config-file>
     </platform>
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+            <feature name="SIP">
+                <param name="ios-package" value="com.javray.cordova.plugin.SIP" />
+            </feature>
+        </config-file>
+        <header-file src="src/ios/SIP.h" />
+        <source-file src="src/ios/SIP.m" />
+    </platform>
 </plugin>

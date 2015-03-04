@@ -127,6 +127,7 @@ public class SIP extends CordovaPlugin {
 
             @Override
             public void onCallEnded(SipAudioCall call) {
+              setSpeakerMode();
               av.sendJavascript("cordova.fireWindowEvent('callEnd', {})");
             }
           };
@@ -150,6 +151,7 @@ public class SIP extends CordovaPlugin {
     private void callSipEnd(CallbackContext callbackContext) {
 
       stopRingbackTone();
+      setSpeakerMode();
 
       if(call != null) {
           try {
@@ -203,7 +205,6 @@ public class SIP extends CordovaPlugin {
     private synchronized void stopRingbackTone() {
         if (mRingbackTone != null) {
             mRingbackTone.stopTone();
-            setSpeakerMode();
             mRingbackTone.release();
             mRingbackTone = null;
         }

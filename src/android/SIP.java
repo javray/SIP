@@ -191,6 +191,13 @@ public class SIP extends CordovaPlugin {
       am.setMicrophoneMute(state);
     }
 
+    private void sendDmtf(int code) {
+      Log.d("SIP", "sendDmtf: " + code);
+      if (call != null) {
+        call.sendDmtf(code);
+      }
+    }
+
     private synchronized void startRingbackTone() {
         setInCallMode();
         if (mRingbackTone == null) {
@@ -249,6 +256,9 @@ public class SIP extends CordovaPlugin {
             else {
               this.setInCallMode();
             }
+        }
+        else if (action.equals("dtmfcall")) {
+            int code = args.getInt(0);
         }
 
         return false;

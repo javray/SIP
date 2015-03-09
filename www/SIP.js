@@ -27,4 +27,8 @@ SIP.prototype.speakerCall = function(arg0, success, error) {
     exec(success, error, "SIP", "speakercall", [arg0]);
 };
 
+SIP.prototype.dtmfCall = function(arg0, success, error) {
+    exec(success, error, "SIP", "dtmfcall", [arg0]);
+};
+
 module.exports = new SIP();

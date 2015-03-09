@@ -239,7 +239,7 @@ public class SIP extends CordovaPlugin {
         }
         else if (action.equals("mutecall")) {
             String estado = args.getString(0);
-            this.muteMicrophone(estado == "on");
+            this.muteMicrophone(estado.equals("on"));
         }
 
         return false;

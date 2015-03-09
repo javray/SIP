@@ -23,4 +23,8 @@ SIP.prototype.muteCall = function(arg0, success, error) {
     exec(success, error, "SIP", "mutecall", [arg0]);
 };
 
+SIP.prototype.speakerCall = function(arg0, success, error) {
+    exec(success, error, "SIP", "speakercall", [arg0]);
+};
+
 module.exports = new SIP();

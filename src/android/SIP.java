@@ -241,6 +241,15 @@ public class SIP extends CordovaPlugin {
             String estado = args.getString(0);
             this.muteMicrophone(estado.equals("on"));
         }
+        else if (action.equals("speakercall")) {
+            String estado = args.getString(0);
+            if (estado.equals("on")) {
+              this.setSpeakerphoneOn();
+            }
+            else {
+              this.setInCallMode();
+            }
+        }
 
         return false;
     }

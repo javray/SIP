@@ -191,10 +191,10 @@ public class SIP extends CordovaPlugin {
       am.setMicrophoneMute(state);
     }
 
-    private void sendDmtf(int code) {
-      Log.d("SIP", "sendDmtf: " + code);
+    private void sendDtmf(int code) {
+      Log.d("SIP", "sendDtmf: " + code);
       if (call != null) {
-        call.sendDmtf(code);
+        call.sendDtmf(code);
       }
     }
 
@@ -259,6 +259,7 @@ public class SIP extends CordovaPlugin {
         }
         else if (action.equals("dtmfcall")) {
             int code = args.getInt(0);
+            this.sendDtmf(code);
         }
 
         return false;

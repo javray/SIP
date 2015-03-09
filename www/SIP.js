@@ -19,4 +19,8 @@ SIP.prototype.disconnect = function(success, error) {
     exec(success, error, "SIP", "disconnect", []);
 };
 
+SIP.prototype.muteCall = function(arg0, success, error) {
+    exec(success, error, "SIP", "mutecall", [arg0]);
+};
+
 module.exports = new SIP();

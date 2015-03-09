@@ -185,6 +185,12 @@ public class SIP extends CordovaPlugin {
       am.setSpeakerphoneOn(true);
     }
 
+    private void muteMicrophone(Boolean state = true) {
+      Log.d("SIP", "muteMicrophone");
+      AudioManager am = ((AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE));
+      am.setMicrophoneMute(state);
+    }
+
     private synchronized void startRingbackTone() {
         setInCallMode();
         if (mRingbackTone == null) {
@@ -230,6 +236,10 @@ public class SIP extends CordovaPlugin {
         }
         else if (action.equals("disconnect")) {
             this.disconnectSip(callbackContext);
+        }
+        else if (action.equals("mutecall")) {
+            String estado = args.getString(0);
+            this.muteMicrophone(estado == "on");
         }
 
         return false;

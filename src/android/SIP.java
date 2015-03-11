@@ -69,6 +69,8 @@ public class SIP extends CordovaPlugin {
 
     accCfg.getNatConfig().setIceEnabled(true);
 
+    Log.d("SIP", accCfg.getSipConfig().toString());
+
 
     mContext = cordova.getActivity();
 

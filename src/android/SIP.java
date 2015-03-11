@@ -29,254 +29,258 @@ import org.pjsip.pjsua2.*;
 
 public class SIP extends CordovaPlugin {
 
-    private Context mContext;
-    private boolean mRingbackToneEnabled = true;
-    private boolean mRingtoneEnabled = true;
-    private Ringtone mRingtone;
-    private ToneGenerator mRingbackTone;
+  static {
+    System.loadLibrary("pjsua2");
+  }
 
-    private SipManager mSipManager = null;
-    private SipProfile mSipProfile = null;
-    private SipAudioCall call = null;
+  private Context mContext;
+  private boolean mRingbackToneEnabled = true;
+  private boolean mRingtoneEnabled = true;
+  private Ringtone mRingtone;
+  private ToneGenerator mRingbackTone;
 
-    private AccountConfig accCfg = null;
+  private SipManager mSipManager = null;
+  private SipProfile mSipProfile = null;
+  private SipAudioCall call = null;
 
-    private CordovaWebView appView = null;
+  private AccountConfig accCfg = null;
 
-
-    public SIP() {
-    }
-
-    public void initialize(CordovaInterface cordova, CordovaWebView webView) {
-
-      super.initialize(cordova, webView);
-
-      appView = webView;
-    }
-
-    private void connectSip(String user, String pass, String domain, CallbackContext callbackContext) {
-
-      accCfg = new AccountConfig();
-      accCfg.setIdUri("sip:" + user);
-      AuthCredInfoVector creds = new AuthCredInfoVector();
-      creds.add(new AuthCredInfo("Digest", "*", user, 0, pass));
-      StringVector proxies = new StringVector();
-      proxies.add(domain);
-
-      accCfg.getNatConfig().setIceEnabled(true);
+  private CordovaWebView appView = null;
 
 
-      mContext = cordova.getActivity();
+  public SIP() {
+  }
 
-      mSipManager = SipManager.newInstance(mContext);
+  public void initialize(CordovaInterface cordova, CordovaWebView webView) {
 
-      if (mSipManager.isVoipSupported(mContext)) {
+    super.initialize(cordova, webView);
 
-        try {
+    appView = webView;
+  }
 
-          SipProfile.Builder builder = new SipProfile.Builder(user, domain);
+  private void connectSip(String user, String pass, String domain, CallbackContext callbackContext) {
 
-          builder.setPassword(pass);
-          builder.setOutboundProxy(domain);
-          mSipProfile = builder.build();
+    accCfg = new AccountConfig();
+    accCfg.setIdUri("sip:" + user);
+    AuthCredInfoVector creds = new AuthCredInfoVector();
+    creds.add(new AuthCredInfo("Digest", "*", user, 0, pass));
+    StringVector proxies = new StringVector();
+    proxies.add(domain);
 
-          if (mSipManager.isOpened(mSipProfile.getUriString())) {
+    accCfg.getNatConfig().setIceEnabled(true);
 
-            callbackContext.success("El perfil SIP ya está abierto");
-          }
-          else {
 
-            mSipManager.open(mSipProfile);
+    mContext = cordova.getActivity();
 
-            callbackContext.success("Perfil configurado");
-          }
-        }
-        catch (Exception e) {
-          callbackContext.error("Perfil no configurado" + e.toString());
-        }
-      }
-      else {
-        callbackContext.error("SIP no soportado");
-      }
-    }
+    mSipManager = SipManager.newInstance(mContext);
 
-    private void disconnectSip(CallbackContext callbackContext) {
-      if (call != null) {
-          call.close();
-      }
-      if (mSipManager != null) {
-        try {
-          if (mSipProfile != null) {
-              mSipManager.close(mSipProfile.getUriString());
-              mSipProfile = null;
-          }
-          mSipManager = null;
-          callbackContext.success("Perfil cerrado");
-        } catch (Exception e) {
-          callbackContext.error("Perfil no cerrado " + e.toString());
-        }
-      }
-    }
+    if (mSipManager.isVoipSupported(mContext)) {
 
-    private void callSip(String number, CallbackContext callbackContext) {
+      try {
 
-      final CordovaWebView av = appView;
+        SipProfile.Builder builder = new SipProfile.Builder(user, domain);
 
-      if (call == null) {
-        try {
-          SipAudioCall.Listener listener = new SipAudioCall.Listener() {
+        builder.setPassword(pass);
+        builder.setOutboundProxy(domain);
+        mSipProfile = builder.build();
 
-            @Override
-            public void onCallEstablished(SipAudioCall call) {
-                stopRingbackTone();
-                call.startAudio();
-                av.sendJavascript("cordova.fireWindowEvent('callEstablished', {})");
-            }
+        if (mSipManager.isOpened(mSipProfile.getUriString())) {
 
-            @Override
-            public void onRingingBack(SipAudioCall call) {
-              startRingbackTone();
-              av.sendJavascript("cordova.fireWindowEvent('ringingBack', {})");
-            }
-
-            @Override
-            public void onCallEnded(SipAudioCall call) {
-              setSpeakerMode();
-              av.sendJavascript("cordova.fireWindowEvent('callEnd', {})");
-            }
-          };
-
-          call = mSipManager.makeAudioCall(mSipProfile.getUriString(), "sip:" + number + "@" + mSipProfile.getSipDomain() + ";user=phone", listener, 30);
-
-          callbackContext.success("Llamada enviada");
-        }
-        catch (SipException e) {
-          callbackContext.error("error " + e.toString());
-          if (call != null) {
-            call.close();
-          }
-        }
-      }
-      else {
-        callbackContext.error("Hay una llamada en curso");
-      }
-    }
-
-    private void callSipEnd(CallbackContext callbackContext) {
-
-      stopRingbackTone();
-      setSpeakerMode();
-
-      if(call != null) {
-          try {
-            call.endCall();
-          } catch (SipException se) {
-            callbackContext.error("Error al finalizar la llamada " + se.toString());
-          }
-          call.close();
-          call = null;
-          callbackContext.success("Llamada finalizada");
-      }
-      else {
-        callbackContext.error("No hay niguna llamada en curso");
-      }
-    }
-
-    private void setInCallMode() {
-      AudioManager am =  ((AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE));
-      am.setMode(AudioManager.MODE_IN_COMMUNICATION);
-      Log.d("SIP", "Speaker: " + am.isSpeakerphoneOn());
-      if (am.isSpeakerphoneOn()) {
-        am.setSpeakerphoneOn(false);
-      }
-      Log.d("SIP", "Speaker: " + am.isSpeakerphoneOn());
-    }
-
-    private void setSpeakerMode() {
-      Log.d("SIP", "setSpeakerMode");
-      AudioManager am = ((AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE));
-      am.setMode(AudioManager.MODE_NORMAL);
-      am.setSpeakerphoneOn(true);
-    }
-
-    private void muteMicrophone(Boolean state) {
-      Log.d("SIP", "muteMicrophone: " + state.toString());
-      AudioManager am = ((AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE));
-      am.setMicrophoneMute(state);
-    }
-
-    private void sendDtmf(int code) {
-      Log.d("SIP", "sendDtmf: " + code);
-      if (call != null) {
-        call.sendDtmf(code);
-      }
-    }
-
-    private synchronized void startRingbackTone() {
-        setInCallMode();
-        if (mRingbackTone == null) {
-            // The volume relative to other sounds in the stream
-            int toneVolume = 80;
-            mRingbackTone = new ToneGenerator(
-                    AudioManager.STREAM_MUSIC, toneVolume);
-        }
-        if (mRingbackTone.startTone(ToneGenerator.TONE_SUP_RINGTONE)) {
-          Log.d("SIP", "Tono iniciado");
+          callbackContext.success("El perfil SIP ya está abierto");
         }
         else {
-          Log.d("SIP", "Tono no iniciado");
-        }
 
+          mSipManager.open(mSipProfile);
+
+          callbackContext.success("Perfil configurado");
+        }
+      }
+      catch (Exception e) {
+        callbackContext.error("Perfil no configurado" + e.toString());
+      }
     }
-
-    private synchronized void stopRingbackTone() {
-        if (mRingbackTone != null) {
-            mRingbackTone.stopTone();
-            mRingbackTone.release();
-            mRingbackTone = null;
-        }
+    else {
+      callbackContext.error("SIP no soportado");
     }
+  }
 
-    @Override
-    public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-
-        if (action.equals("connect")) {
-            String user = args.getString(0);
-            String pass = args.getString(1);
-            String domain = args.getString(2);
-
-            this.connectSip(user, pass, domain, callbackContext);
-        }
-        else if (action.equals("makecall")) {
-            String number = args.getString(0);
-
-            this.callSip(number, callbackContext);
-        }
-        else if (action.equals("endcall")) {
-            this.callSipEnd(callbackContext);
-        }
-        else if (action.equals("disconnect")) {
-            this.disconnectSip(callbackContext);
-        }
-        else if (action.equals("mutecall")) {
-            String estado = args.getString(0);
-            this.muteMicrophone(estado.equals("on"));
-        }
-        else if (action.equals("speakercall")) {
-            String estado = args.getString(0);
-            if (estado.equals("on")) {
-              this.setSpeakerMode();
-            }
-            else {
-              this.setInCallMode();
-            }
-        }
-        else if (action.equals("dtmfcall")) {
-            int code = args.getInt(0);
-            this.sendDtmf(code);
-        }
-
-        return false;
+  private void disconnectSip(CallbackContext callbackContext) {
+    if (call != null) {
+        call.close();
     }
+    if (mSipManager != null) {
+      try {
+        if (mSipProfile != null) {
+            mSipManager.close(mSipProfile.getUriString());
+            mSipProfile = null;
+        }
+        mSipManager = null;
+        callbackContext.success("Perfil cerrado");
+      } catch (Exception e) {
+        callbackContext.error("Perfil no cerrado " + e.toString());
+      }
+    }
+  }
+
+  private void callSip(String number, CallbackContext callbackContext) {
+
+    final CordovaWebView av = appView;
+
+    if (call == null) {
+      try {
+        SipAudioCall.Listener listener = new SipAudioCall.Listener() {
+
+          @Override
+          public void onCallEstablished(SipAudioCall call) {
+              stopRingbackTone();
+              call.startAudio();
+              av.sendJavascript("cordova.fireWindowEvent('callEstablished', {})");
+          }
+
+          @Override
+          public void onRingingBack(SipAudioCall call) {
+            startRingbackTone();
+            av.sendJavascript("cordova.fireWindowEvent('ringingBack', {})");
+          }
+
+          @Override
+          public void onCallEnded(SipAudioCall call) {
+            setSpeakerMode();
+            av.sendJavascript("cordova.fireWindowEvent('callEnd', {})");
+          }
+        };
+
+        call = mSipManager.makeAudioCall(mSipProfile.getUriString(), "sip:" + number + "@" + mSipProfile.getSipDomain() + ";user=phone", listener, 30);
+
+        callbackContext.success("Llamada enviada");
+      }
+      catch (SipException e) {
+        callbackContext.error("error " + e.toString());
+        if (call != null) {
+          call.close();
+        }
+      }
+    }
+    else {
+      callbackContext.error("Hay una llamada en curso");
+    }
+  }
+
+  private void callSipEnd(CallbackContext callbackContext) {
+
+    stopRingbackTone();
+    setSpeakerMode();
+
+    if(call != null) {
+        try {
+          call.endCall();
+        } catch (SipException se) {
+          callbackContext.error("Error al finalizar la llamada " + se.toString());
+        }
+        call.close();
+        call = null;
+        callbackContext.success("Llamada finalizada");
+    }
+    else {
+      callbackContext.error("No hay niguna llamada en curso");
+    }
+  }
+
+  private void setInCallMode() {
+    AudioManager am =  ((AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE));
+    am.setMode(AudioManager.MODE_IN_COMMUNICATION);
+    Log.d("SIP", "Speaker: " + am.isSpeakerphoneOn());
+    if (am.isSpeakerphoneOn()) {
+      am.setSpeakerphoneOn(false);
+    }
+    Log.d("SIP", "Speaker: " + am.isSpeakerphoneOn());
+  }
+
+  private void setSpeakerMode() {
+    Log.d("SIP", "setSpeakerMode");
+    AudioManager am = ((AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE));
+    am.setMode(AudioManager.MODE_NORMAL);
+    am.setSpeakerphoneOn(true);
+  }
+
+  private void muteMicrophone(Boolean state) {
+    Log.d("SIP", "muteMicrophone: " + state.toString());
+    AudioManager am = ((AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE));
+    am.setMicrophoneMute(state);
+  }
+
+  private void sendDtmf(int code) {
+    Log.d("SIP", "sendDtmf: " + code);
+    if (call != null) {
+      call.sendDtmf(code);
+    }
+  }
+
+  private synchronized void startRingbackTone() {
+      setInCallMode();
+      if (mRingbackTone == null) {
+          // The volume relative to other sounds in the stream
+          int toneVolume = 80;
+          mRingbackTone = new ToneGenerator(
+                  AudioManager.STREAM_MUSIC, toneVolume);
+      }
+      if (mRingbackTone.startTone(ToneGenerator.TONE_SUP_RINGTONE)) {
+        Log.d("SIP", "Tono iniciado");
+      }
+      else {
+        Log.d("SIP", "Tono no iniciado");
+      }
+
+  }
+
+  private synchronized void stopRingbackTone() {
+      if (mRingbackTone != null) {
+          mRingbackTone.stopTone();
+          mRingbackTone.release();
+          mRingbackTone = null;
+      }
+  }
+
+  @Override
+  public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
+
+      if (action.equals("connect")) {
+          String user = args.getString(0);
+          String pass = args.getString(1);
+          String domain = args.getString(2);
+
+          this.connectSip(user, pass, domain, callbackContext);
+      }
+      else if (action.equals("makecall")) {
+          String number = args.getString(0);
+
+          this.callSip(number, callbackContext);
+      }
+      else if (action.equals("endcall")) {
+          this.callSipEnd(callbackContext);
+      }
+      else if (action.equals("disconnect")) {
+          this.disconnectSip(callbackContext);
+      }
+      else if (action.equals("mutecall")) {
+          String estado = args.getString(0);
+          this.muteMicrophone(estado.equals("on"));
+      }
+      else if (action.equals("speakercall")) {
+          String estado = args.getString(0);
+          if (estado.equals("on")) {
+            this.setSpeakerMode();
+          }
+          else {
+            this.setInCallMode();
+          }
+      }
+      else if (action.equals("dtmfcall")) {
+          int code = args.getInt(0);
+          this.sendDtmf(code);
+      }
+
+      return false;
+  }
 }
 

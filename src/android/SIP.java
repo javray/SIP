@@ -71,7 +71,13 @@ public class SIP extends CordovaPlugin {
     accCfg.getNatConfig().setIceEnabled(true);
 
     acc = new Account();
-    acc.create(accCfg);
+
+    try {
+      acc.create(accCfg);
+    }
+    catch (Exception e) {
+      acc = null;
+    }
 
     mContext = cordova.getActivity();
 

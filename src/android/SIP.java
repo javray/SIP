@@ -39,6 +39,8 @@ public class SIP extends CordovaPlugin {
     private SipProfile mSipProfile = null;
     private SipAudioCall call = null;
 
+    private AccountConfig accCfg = null;
+
     private CordovaWebView appView = null;
 
 
@@ -53,6 +55,16 @@ public class SIP extends CordovaPlugin {
     }
 
     private void connectSip(String user, String pass, String domain, CallbackContext callbackContext) {
+
+      accCfg = new AccountConfig();
+      accCfg.setIdUri("sip:" + user);
+      AuthCredInfoVector creds = new AuthCredInfoVector();
+      creds.add(new AuthCredInfo("Digest", "*", user, 0, pass));
+      StringVector proxies = new StringVector();
+      proxies.add(domain);
+
+      accCfg.getNatConfig().setIceEnabled(true);
+
 
       mContext = cordova.getActivity();
 

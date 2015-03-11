@@ -25,7 +25,7 @@ import android.net.sip.SipRegistrationListener;
 
 import android.util.Log;
 
-import com.csipsimple.api.ISipService;
+import org.pjsip.pjsua2.*;
 
 public class SIP extends CordovaPlugin {
 

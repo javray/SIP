@@ -25,13 +25,9 @@ import android.net.sip.SipRegistrationListener;
 
 import android.util.Log;
 
-import org.pjsip.pjsua2.*;
+import com.csipsimple.api.*;
 
 public class SIP extends CordovaPlugin {
-
-  static {
-    System.loadLibrary("pjsua2");
-  }
 
   private Context mContext;
   private boolean mRingbackToneEnabled = true;
@@ -60,27 +56,6 @@ public class SIP extends CordovaPlugin {
   }
 
   private void connectSip(String user, String pass, String domain, CallbackContext callbackContext) {
-
-    accCfg = new AccountConfig();
-    accCfg.setIdUri("sip:" + user);
-    AuthCredInfoVector creds = new AuthCredInfoVector();
-    creds.add(new AuthCredInfo("Digest", "*", user, 0, pass));
-    accCfg.getSipConfig().setAuthCreds(creds);
-    StringVector proxies = new StringVector();
-    proxies.add(domain);
-
-    accCfg.getSipConfig().setProxies(proxies);
-
-    accCfg.getNatConfig().setIceEnabled(true);
-
-    acc = new Account();
-
-    try {
-      acc.create(accCfg);
-    }
-    catch (Exception e) {
-      acc = null;
-    }
 
     mContext = cordova.getActivity();
 

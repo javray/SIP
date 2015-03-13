@@ -39,9 +39,6 @@ public class SIP extends CordovaPlugin {
   private SipProfile mSipProfile = null;
   private SipAudioCall call = null;
 
-  private AccountConfig accCfg = null;
-  private Account acc = null;
-
   private CordovaWebView appView = null;
 
 

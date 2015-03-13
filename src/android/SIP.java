@@ -65,12 +65,15 @@ public class SIP extends CordovaPlugin {
     accCfg.setIdUri("sip:" + user);
     AuthCredInfoVector creds = new AuthCredInfoVector();
     creds.add(new AuthCredInfo("Digest", "*", user, 0, pass));
+    accCfg.getSipConfig().setAuthCreds(creds);
     StringVector proxies = new StringVector();
     proxies.add(domain);
 
+    accCfg.getSipConfig().setProxies(proxies);
+
     accCfg.getNatConfig().setIceEnabled(true);
 
-    acc = new Account(accCfg);
+    acc = new Account();
 
     try {
       acc.create(accCfg);

@@ -43,6 +43,7 @@ public class SIP extends CordovaPlugin {
 
 
   public SIP() {
+    new G729();
   }
 
   public void initialize(CordovaInterface cordova, CordovaWebView webView) {

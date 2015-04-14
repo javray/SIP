@@ -25,7 +25,9 @@ import android.net.sip.SipRegistrationListener;
 
 import android.util.Log;
 
-import com.csipsimple.api.*;
+import org.doubango.ngn.NgnEngine;
+import org.doubango.ngn.services.INgnConfigurationService;
+import org.doubango.ngn.utils.NgnConfigurationEntry;
 
 public class SIP extends CordovaPlugin {
 
@@ -41,9 +43,10 @@ public class SIP extends CordovaPlugin {
 
   private CordovaWebView appView = null;
 
+  private NgnEngine mEngine = null;
+
 
   public SIP() {
-    new G729();
   }
 
   public void initialize(CordovaInterface cordova, CordovaWebView webView) {
@@ -56,6 +59,31 @@ public class SIP extends CordovaPlugin {
   private void connectSip(String user, String pass, String domain, CallbackContext callbackContext) {
 
     mContext = cordova.getActivity();
+
+    mEngine = NgnEngine.getInstance();
+
+    mSipManager = SipManager.newInstance(mContext);
+
+    if (mSipManager.isVoipSupported(mContext)) {
+
+      INgnConfigurationService mConfigurationService = mEngine.getConfigurationService();
+
+      mConfigurationService.putString(NgnConfigurationEntry.IDENTITY_IMPI, user);
+      mConfigurationService.putString(NgnConfigurationEntry.IDENTITY_IMPU, String.format("sip:%s@%s", user, domain));
+      mConfigurationService.putString(NgnConfigurationEntry.IDENTITY_PASSWORD, pass);
+      mConfigurationService.putString(NgnConfigurationEntry.NETWORK_PCSCF_HOST, domain);
+      mConfigurationService.putInt(NgnConfigurationEntry.NETWORK_PCSCF_PORT, NgnConfigurationEntry.DEFAULT_NETWORK_PCSCF_PORT);
+      mConfigurationService.putString(NgnConfigurationEntry.NETWORK_REALM, domain);
+      mConfigurationService.putBoolean(NgnConfigurationEntry.NETWORK_USE_3G, true);
+      mConfigurationService.putInt(NgnConfigurationEntry.NETWORK_REGISTRATION_TIMEOUT, 3600);
+
+      mConfigurationService.commit();
+
+    }
+    else {
+      callbackContext.error("SIP no soportado");
+    }
+    /*
 
     mSipManager = SipManager.newInstance(mContext);
 
@@ -87,6 +115,7 @@ public class SIP extends CordovaPlugin {
     else {
       callbackContext.error("SIP no soportado");
     }
+    */
   }
 
   private void disconnectSip(CallbackContext callbackContext) {

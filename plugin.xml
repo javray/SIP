@@ -31,6 +31,7 @@
       <lib-file src="src/android/libs/armeabi" arch="device" target-dir="libs"/>
       <lib-file src="src/android/libs/armeabi-v7a" arch="device" target-dir="libs"/>
       <lib-file src="src/android/libs/classes.jar" target-dir="libs"/>
+      <lib-file src="src/android/libs/simple-xml-2.3.4.jar" target-dir="libs"/>
     </platform>
     <platform name="ios">
         <config-file target="config.xml" parent="/*">

@@ -5,11 +5,16 @@ import org.doubango.ngn.NgnEngine;
 import org.doubango.ngn.services.INgnConfigurationService;
 import org.doubango.ngn.utils.NgnConfigurationEntry;
 
+import android.util.Log;
+
 public class SIPService extends NgnApplication {
 
   private NgnEngine mEngine = null;
 
   public SIPService() {
+
+    Log.d("SIPService", NgnApplication.getContext());
+
     mEngine = NgnEngine.getInstance();
   }
 

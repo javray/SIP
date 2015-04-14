@@ -44,6 +44,7 @@ public class SIP extends CordovaPlugin {
   private CordovaWebView appView = null;
 
   private NgnEngine mEngine = null;
+  private NgnEngine mEngineClass = null;
 
 
   public SIP() {
@@ -54,13 +55,15 @@ public class SIP extends CordovaPlugin {
     super.initialize(cordova, webView);
 
     appView = webView;
+
+    mEngineClass = new NgnEngine(cordova);
   }
 
   private void connectSip(String user, String pass, String domain, CallbackContext callbackContext) {
 
     mContext = cordova.getActivity();
 
-    mEngine = NgnEngine.getInstance();
+    mEngine = NgnEngineClass.getInstance();
 
     mSipManager = SipManager.newInstance(mContext);
 

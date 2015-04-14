@@ -1,5 +1,7 @@
 package com.javray.cordova.plugin;
 
+import android.content.Context;
+
 import org.doubango.ngn.NgnApplication;
 import org.doubango.ngn.NgnEngine;
 import org.doubango.ngn.services.INgnConfigurationService;
@@ -8,8 +10,15 @@ import org.doubango.ngn.utils.NgnConfigurationEntry;
 public class SIPService extends NgnApplication {
 
   private NgnEngine mEngine = null;
+  private Context mContext = null;
 
-  public SIPService() {
+  public SIPService(Context ctx) {
+    mContext = ctx;
+  }
+
+  @Override
+  public static Context getContext() {
+    return mContext;
   }
 
   public void connectSip(String user, String pass, String domain) {

@@ -13,7 +13,7 @@ public class SIPService extends NgnApplication {
 
   public SIPService() {
 
-    Log.d("SIPService", NgnApplication.getContext());
+    Log.d("SIPService", NgnApplication.getContext().toString());
 
     mEngine = NgnEngine.getInstance();
   }

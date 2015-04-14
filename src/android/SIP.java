@@ -63,7 +63,7 @@ public class SIP extends CordovaPlugin {
 
     mContext = cordova.getActivity();
 
-    mEngine = NgnEngineClass.getInstance();
+    mEngine = mEngineClass.getInstance();
 
     mSipManager = SipManager.newInstance(mContext);
 

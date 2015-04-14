@@ -10,11 +10,10 @@ public class SIPService extends NgnApplication {
   private NgnEngine mEngine = null;
 
   public SIPService() {
+    mEngine = NgnEngine.getInstance();
   }
 
   public void connectSip(String user, String pass, String domain) {
-
-    mEngine = NgnEngine.getInstance();
 
     INgnConfigurationService mConfigurationService = mEngine.getConfigurationService();
 

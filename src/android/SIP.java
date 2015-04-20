@@ -42,6 +42,37 @@ public class SIP extends CordovaPlugin {
 
   private CordovaWebView appView = null;
 
+  public class PhoneListener extends PhoneStateListener
+{
+    private Context context;
+    public static String getincomno;
+
+    public PhoneListener(Context c) {
+        Log.i("SIP", "PhoneListener constructor");
+        context = c;
+    }
+
+    public void onCallStateChanged (int state, String incomingNumber)
+    {
+
+        Log.d("SIP", Integer.toString(state));
+
+        switch (state) {
+        case TelephonyManager.CALL_STATE_IDLE:
+
+            break;
+        case TelephonyManager.CALL_STATE_RINGING:
+            Log.d("SIP", "CALL_STATE_RINGING");
+            break;
+        case TelephonyManager.CALL_STATE_OFFHOOK:
+
+            break;
+        }
+    }
+  }
+
+  private PhoneListener pListener = null;
+
   public SIP() {
   }
 
@@ -50,6 +81,8 @@ public class SIP extends CordovaPlugin {
     super.initialize(cordova, webView);
 
     appView = webView;
+
+    pListener = new PhoneListener(webView.getContext());
   }
 
   private void connectSip(String user, String pass, String domain, CallbackContext callbackContext) {
@@ -133,27 +166,6 @@ public class SIP extends CordovaPlugin {
             av.sendJavascript("cordova.fireWindowEvent('callEnd', {})");
           }
         };
-
-        PhoneStateListener callListener = new PhoneStateListener() {
-          @Override
-          public void onCallStateChanged (int state, String incomingNumber) {
-
-              Log.d("SIP", Integer.toString(state));
-
-              switch (state) {
-              case TelephonyManager.CALL_STATE_IDLE:
-                  break;
-              case TelephonyManager.CALL_STATE_RINGING:
-                  Log.d("CallRecorder", "CALL_STATE_RINGING");
-                  break;
-              case TelephonyManager.CALL_STATE_OFFHOOK:
-
-                  break;
-              }
-          }
-        };
-
-        appView.getContext().registerListener(callListener);
 
         call = mSipManager.makeAudioCall(mSipProfile.getUriString(), "sip:" + number + "@" + mSipProfile.getSipDomain() + ";user=phone", listener, 30);
 

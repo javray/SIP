@@ -38,8 +38,6 @@ public class SIP extends CordovaPlugin {
   private SipAudioCall call = null;
 
   private CordovaWebView appView = null;
-  
-  private SIPService mSIPService = null;
 
   public SIP() {
   }

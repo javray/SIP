@@ -69,7 +69,12 @@ public class SIP extends CordovaPlugin {
           switch (state) {
           case TelephonyManager.CALL_STATE_IDLE:
               if (call != null) {
-                call.continueCall(0);
+                try {
+                  call.continueCall(0);
+                }
+                catch (SipException e) {
+                  Log.d("SIP", "Cant continue sipcall");
+                }
               }
               break;
           case TelephonyManager.CALL_STATE_RINGING:
@@ -77,7 +82,12 @@ public class SIP extends CordovaPlugin {
               break;
           case TelephonyManager.CALL_STATE_OFFHOOK:
               if (call != null) {
-                call.holdCall(0);
+                try {
+                  call.holdCall(0);
+                }
+                catch (SipException e) {
+                  Log.d("SIP", "Cant hold sipcall");
+                }
               }
               break;
           }

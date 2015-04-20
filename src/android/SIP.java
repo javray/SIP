@@ -85,7 +85,7 @@ public class SIP extends CordovaPlugin {
     }
   }
 
-  public IncomingCallReceiver callReceiver;
+  public IncomingCallReceiver callReceiver = null;
 
   public SIP() {
   }
@@ -100,10 +100,6 @@ public class SIP extends CordovaPlugin {
 
     telephonyManager.listen(phoneStateListener, LISTEN_CALL_STATE);
 
-    IntentFilter filter = new IntentFilter();
-    filter.addAction("es.sarenet.INCOMING_CALL");
-    callReceiver = new IncomingCallReceiver();
-    cordova.getActivity().registerReceiver(callReceiver, filter);
   }
 
   private PhoneStateListener phoneStateListener = new PhoneStateListener() {
@@ -178,6 +174,12 @@ public class SIP extends CordovaPlugin {
   }
 
   private void listenSIP() {
+
+    IntentFilter filter = new IntentFilter();
+    filter.addAction("es.sarenet.INCOMING_CALL");
+    callReceiver = new IncomingCallReceiver();
+    cordova.getActivity().registerReceiver(callReceiver, filter);
+
     Intent intent = new Intent(); 
     intent.setAction("es.sarenet.INCOMING_CALL"); 
     PendingIntent pendingIntent = PendingIntent.getBroadcast(cordova.getActivity(), 0, intent, Intent.FILL_IN_DATA); 
@@ -189,6 +191,13 @@ public class SIP extends CordovaPlugin {
     }
   }
 
+  private void stopListenSIP() {
+    if (callReceiver != null) {
+      cordova.getActivity().unregisterReceiver(callReceiver);
+      callReceiver = null;
+    }
+  }
+
   private void disconnectSip(CallbackContext callbackContext) {
     if (call != null) {
         call.close();
@@ -196,6 +205,7 @@ public class SIP extends CordovaPlugin {
     if (mSipManager != null) {
       try {
         if (mSipProfile != null) {
+            this.stopListenSIP();
             mSipManager.close(mSipProfile.getUriString());
             mSipProfile = null;
         }
@@ -371,6 +381,9 @@ public class SIP extends CordovaPlugin {
       }
       else if (action.equals("listen")) {
           this.listenSIP();
+      }
+      else if (action.equals("stoplisten")) {
+          this.stopListenSIP();
       }
 
       return false;

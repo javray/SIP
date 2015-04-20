@@ -12,7 +12,6 @@
         </feature>
       </config-file>
       <source-file src="src/android/SIP.java" target-dir="src/com/javray/cordova/plugin/SIP" />
-      <source-file src="src/android/SIPService.java" target-dir="src/com/javray/cordova/plugin/SIP" />
 
       <config-file target="AndroidManifest.xml" parent="/*">
           <uses-permission android:name="android.permission.USE_SIP" />
@@ -29,10 +28,12 @@
           <uses-feature android:name="android.hardware.microphone" android:required="true" />
           <uses-feature android:name="android.software.sip" android:required="true" />
       </config-file>
+      <!--
       <lib-file src="src/android/libs/armeabi" arch="device" target-dir="libs"/>
       <lib-file src="src/android/libs/armeabi-v7a" arch="device" target-dir="libs"/>
       <lib-file src="src/android/libs/classes.jar" target-dir="libs"/>
       <lib-file src="src/android/libs/simple-xml-2.3.4.jar" target-dir="libs"/>
+      -->
     </platform>
     <platform name="ios">
         <config-file target="config.xml" parent="/*">

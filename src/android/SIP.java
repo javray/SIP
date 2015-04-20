@@ -23,6 +23,9 @@ import android.net.sip.SipAudioCall;
 import android.net.sip.SipException;
 import android.net.sip.SipRegistrationListener;
 
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
+
 import android.util.Log;
 
 public class SIP extends CordovaPlugin {
@@ -131,6 +134,25 @@ public class SIP extends CordovaPlugin {
           }
         };
 
+        PhoneStateListener callListener = new PhoneStateListener() {
+          @Override
+          public void onCallStateChanged (int state, String incomingNumber) {
+
+              Log.d("SIP", state);
+
+              switch (state) {
+              case TelephonyManager.CALL_STATE_IDLE:
+                  break;
+              case TelephonyManager.CALL_STATE_RINGING:
+                  Log.d("CallRecorder", "CALL_STATE_RINGING");
+                  break;
+              case TelephonyManager.CALL_STATE_OFFHOOK:
+
+                  break;
+              }
+          }
+        };
+
         call = mSipManager.makeAudioCall(mSipProfile.getUriString(), "sip:" + number + "@" + mSipProfile.getSipDomain() + ";user=phone", listener, 30);
 
         callbackContext.success("Llamada enviada");
@@ -160,6 +182,7 @@ public class SIP extends CordovaPlugin {
         }
         call.close();
         call = null;
+        this.receiver = null;
         callbackContext.success("Llamada finalizada");
     }
     else {

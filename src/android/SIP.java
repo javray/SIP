@@ -45,36 +45,6 @@ public class SIP extends CordovaPlugin {
 
   public static TelephonyManager telephonyManager = null;
 
-  public class PhoneListener extends PhoneStateListener {
-
-    private Context context;
-
-    public PhoneListener(Context c) {
-        Log.i("SIP", "PhoneListener constructor");
-        context = c;
-    }
-
-    public void onCallStateChanged (int state, String incomingNumber)
-    {
-
-        Log.d("SIP", Integer.toString(state));
-
-        switch (state) {
-        case TelephonyManager.CALL_STATE_IDLE:
-
-            break;
-        case TelephonyManager.CALL_STATE_RINGING:
-            Log.d("SIP", "CALL_STATE_RINGING");
-            break;
-        case TelephonyManager.CALL_STATE_OFFHOOK:
-
-            break;
-        }
-    }
-  }
-
-  private PhoneListener pListener = null;
-
   public SIP() {
   }
 
@@ -83,8 +53,6 @@ public class SIP extends CordovaPlugin {
     super.initialize(cordova, webView);
 
     appView = webView;
-
-    pListener = new PhoneListener(webView.getContext());
 
     telephonyManager = (TelephonyManager) cordova.getActivity().getSystemService(Context.TELEPHONY_SERVICE);
 
@@ -100,13 +68,17 @@ public class SIP extends CordovaPlugin {
 
           switch (state) {
           case TelephonyManager.CALL_STATE_IDLE:
-
+              if (call != null) {
+                call.continueCall();
+              }
               break;
           case TelephonyManager.CALL_STATE_RINGING:
               Log.d("SIP", "CALL_STATE_RINGING");
               break;
           case TelephonyManager.CALL_STATE_OFFHOOK:
-
+              if (call != null) {
+                call.holdCall();
+              }
               break;
           }
       }

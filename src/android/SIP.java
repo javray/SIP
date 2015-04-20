@@ -49,8 +49,6 @@ public class SIP extends CordovaPlugin {
     super.initialize(cordova, webView);
 
     appView = webView;
-
-    mSIPService = new SIPService();
   }
 
   private void connectSip(String user, String pass, String domain, CallbackContext callbackContext) {

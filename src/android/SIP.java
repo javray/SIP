@@ -180,7 +180,7 @@ public class SIP extends CordovaPlugin {
   private void listenSIP() {
     Intent intent = new Intent(); 
     intent.setAction("es.sarenet.INCOMING_CALL"); 
-    PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, Intent.FILL_IN_DATA); 
+    PendingIntent pendingIntent = PendingIntent.getBroadcast(cordova.getActivity(), 0, intent, Intent.FILL_IN_DATA); 
     mSipManager.open(mSipProfile, pendingIntent, null);
   }
 

@@ -61,18 +61,6 @@ public class SIP extends CordovaPlugin {
 
     if (mSipManager.isVoipSupported(mContext)) {
 
-      mSIPService.connectSip(user, pass, domain);
-
-    }
-    else {
-      callbackContext.error("SIP no soportado");
-    }
-    /*
-
-    mSipManager = SipManager.newInstance(mContext);
-
-    if (mSipManager.isVoipSupported(mContext)) {
-
       try {
 
         SipProfile.Builder builder = new SipProfile.Builder(user, domain);
@@ -99,7 +87,6 @@ public class SIP extends CordovaPlugin {
     else {
       callbackContext.error("SIP no soportado");
     }
-    */
   }
 
   private void disconnectSip(CallbackContext callbackContext) {

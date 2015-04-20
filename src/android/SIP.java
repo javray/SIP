@@ -15,6 +15,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
+import android.app.PendingIntent;
+
 import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;

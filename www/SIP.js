@@ -31,4 +31,8 @@ SIP.prototype.dtmfCall = function(arg0, success, error) {
     exec(success, error, "SIP", "dtmfcall", [arg0]);
 };
 
+SIP.prototype.listenCall = function(success, error) {
+    exec(success, error, "SIP", "listen", []);
+};
+
 module.exports = new SIP();

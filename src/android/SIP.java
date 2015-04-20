@@ -88,7 +88,7 @@ public class SIP extends CordovaPlugin {
 
     telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 
-    telephonyManager.listen(phoneStateListener, LISTEN_CALL_STATE)
+    telephonyManager.listen(phoneStateListener, LISTEN_CALL_STATE);
   }
 
   private PhoneStateListener phoneStateListener = new PhoneStateListener() {

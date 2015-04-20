@@ -25,6 +25,7 @@ import android.net.sip.SipRegistrationListener;
 
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import static android.telephony.PhoneStateListener.*;
 
 import android.util.Log;
 
@@ -41,6 +42,8 @@ public class SIP extends CordovaPlugin {
   private SipAudioCall call = null;
 
   private CordovaWebView appView = null;
+
+  public static TelephonyManager telephonyManager = null;
 
   public class PhoneListener extends PhoneStateListener {
 
@@ -82,7 +85,32 @@ public class SIP extends CordovaPlugin {
     appView = webView;
 
     pListener = new PhoneListener(webView.getContext());
+
+    telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+
+    telephonyManager.listen(phoneStateListener, LISTEN_CALL_STATE)
   }
+
+  private PhoneStateListener phoneStateListener = new PhoneStateListener() {
+      @Override
+      public void onCallStateChanged (int state, String incomingNumber)
+      {
+
+          Log.d("SIP", Integer.toString(state));
+
+          switch (state) {
+          case TelephonyManager.CALL_STATE_IDLE:
+
+              break;
+          case TelephonyManager.CALL_STATE_RINGING:
+              Log.d("SIP", "CALL_STATE_RINGING");
+              break;
+          case TelephonyManager.CALL_STATE_OFFHOOK:
+
+              break;
+          }
+      }
+  };
 
   private void connectSip(String user, String pass, String domain, CallbackContext callbackContext) {
 

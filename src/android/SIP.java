@@ -77,7 +77,7 @@ public class SIP extends CordovaPlugin {
               break;
           case TelephonyManager.CALL_STATE_OFFHOOK:
               if (call != null) {
-                call.holdCall();
+                call.holdCall(0);
               }
               break;
           }
@@ -163,6 +163,11 @@ public class SIP extends CordovaPlugin {
           public void onCallEnded(SipAudioCall call) {
             setSpeakerMode();
             av.sendJavascript("cordova.fireWindowEvent('callEnd', {})");
+          }
+
+          @Override
+          public void onCallHeld(SipAudioCall call) {
+            av.sendJavascript("cordova.fireWindowEvent('callHold', {})");
           }
         };
 

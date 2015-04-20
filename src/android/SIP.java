@@ -138,7 +138,7 @@ public class SIP extends CordovaPlugin {
           @Override
           public void onCallStateChanged (int state, String incomingNumber) {
 
-              Log.d("SIP", state);
+              Log.d("SIP", Integer.toString(state));
 
               switch (state) {
               case TelephonyManager.CALL_STATE_IDLE:
@@ -182,7 +182,6 @@ public class SIP extends CordovaPlugin {
         }
         call.close();
         call = null;
-        this.receiver = null;
         callbackContext.success("Llamada finalizada");
     }
     else {

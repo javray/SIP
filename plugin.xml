@@ -22,6 +22,7 @@
           <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
           <uses-permission android:name="android.permission.RECORD_AUDIO" />
           <uses-permission android:name="android.permission.CONFIGURE_SIP" />
+          <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
           <uses-feature android:name="android.hardware.sip.voip" android:required="true" />
           <uses-feature android:name="android.hardware.wifi" android:required="true" />

@@ -42,10 +42,9 @@ public class SIP extends CordovaPlugin {
 
   private CordovaWebView appView = null;
 
-  public class PhoneListener extends PhoneStateListener
-{
+  public class PhoneListener extends PhoneStateListener {
+
     private Context context;
-    public static String getincomno;
 
     public PhoneListener(Context c) {
         Log.i("SIP", "PhoneListener constructor");

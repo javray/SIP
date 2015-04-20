@@ -12,6 +12,9 @@ import org.json.JSONObject;
 import java.io.*;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+
 import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -45,6 +48,41 @@ public class SIP extends CordovaPlugin {
 
   public static TelephonyManager telephonyManager = null;
 
+  public class IncomingCallReceiver extends BroadcastReceiver {
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        SipAudioCall incomingCall = null;
+
+        Log.d("SIP", "Llamada recibida");
+        try {
+            SipAudioCall.Listener listener = new SipAudioCall.Listener() {
+                @Override
+                public void onRinging(SipAudioCall call, SipProfile caller) {
+                    try {
+                        call.answerCall(30);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+            incomingCall = mSipManager.takeAudioCall(intent, listener);
+            incomingCall.answerCall(30);
+            incomingCall.startAudio();
+            incomingCall.setSpeakerMode(true);
+            if(incomingCall.isMuted()) {
+                incomingCall.toggleMute();
+            }
+            appView.sendJavascript("cordova.fireWindowEvent('incommingCall', {})");
+        } catch (Exception e) {
+            if (incomingCall != null) {
+                incomingCall.close();
+            }
+        }
+    }
+  }
+
+  public IncomingCallReceiver callReceiver;
+
   public SIP() {
   }
 
@@ -57,6 +95,11 @@ public class SIP extends CordovaPlugin {
     telephonyManager = (TelephonyManager) cordova.getActivity().getSystemService(Context.TELEPHONY_SERVICE);
 
     telephonyManager.listen(phoneStateListener, LISTEN_CALL_STATE);
+
+    IntentFilter filter = new IntentFilter();
+    filter.addAction("es.sarenet.INCOMING_CALL");
+    callReceiver = new IncomingCallReceiver();
+    cordova.getActivity().registerReceiver(callReceiver, filter);
   }
 
   private PhoneStateListener phoneStateListener = new PhoneStateListener() {
@@ -128,6 +171,13 @@ public class SIP extends CordovaPlugin {
     else {
       callbackContext.error("SIP no soportado");
     }
+  }
+
+  private void listenSIP() {
+    Intent intent = new Intent(); 
+    intent.setAction("es.sarenet.INCOMING_CALL"); 
+    PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, Intent.FILL_IN_DATA); 
+    mSipManager.open(mSipProfile, pendingIntent, null);
   }
 
   private void disconnectSip(CallbackContext callbackContext) {
@@ -309,6 +359,9 @@ public class SIP extends CordovaPlugin {
       else if (action.equals("dtmfcall")) {
           int code = args.getInt(0);
           this.sendDtmf(code);
+      }
+      else if (action.equals("listen")) {
+          this.listenSIP();
       }
 
       return false;

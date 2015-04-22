@@ -55,10 +55,11 @@ public class SIP extends CordovaPlugin {
   public class IncomingCallReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        SipAudioCall incomingCall = null;
+        //SipAudioCall incomingCall = null;
 
         Log.d("SIP", "Llamada recibida");
         try {
+            /*
             SipAudioCall.Listener listener = new SipAudioCall.Listener() {
                 @Override
                 public void onRinging(SipAudioCall call, SipProfile caller) {
@@ -69,17 +70,20 @@ public class SIP extends CordovaPlugin {
                     }
                 }
             };
-            incomingCall = mSipManager.takeAudioCall(intent, listener);
-            incomingCall.answerCall(30);
-            incomingCall.startAudio();
-            incomingCall.setSpeakerMode(true);
+            */
+            /*
+            call = mSipManager.takeAudioCall(intent, listener);
+            call.answerCall(30);
+            call.startAudio();
+            call.setSpeakerMode(true);
             if(incomingCall.isMuted()) {
                 incomingCall.toggleMute();
             }
+            */
             appView.sendJavascript("cordova.fireWindowEvent('incommingCall', {})");
         } catch (Exception e) {
-            if (incomingCall != null) {
-                incomingCall.close();
+            if (call != null) {
+                call.close();
             }
         }
     }
@@ -135,6 +139,38 @@ public class SIP extends CordovaPlugin {
               break;
           }
       }
+  };
+
+  private SipAudioCall.Listener listener = new SipAudioCall.Listener() {
+
+    @Override
+    public void onCallEstablished(SipAudioCall call) {
+        stopRingbackTone();
+        call.startAudio();
+        appView.sendJavascript("cordova.fireWindowEvent('callEstablished', {})");
+    }
+
+    @Override
+    public void onRingingBack(SipAudioCall call) {
+      startRingbackTone();
+      appView.sendJavascript("cordova.fireWindowEvent('ringingBack', {})");
+    }
+
+    @Override
+    public void onCallEnded(SipAudioCall call) {
+      setSpeakerMode();
+      appView.sendJavascript("cordova.fireWindowEvent('callEnd', {})");
+    }
+
+    @Override
+    public void onCallHeld(SipAudioCall call) {
+      appView.sendJavascript("cordova.fireWindowEvent('callHold', {})");
+    }
+
+    @Override
+    public void onRinging(SipAudioCall call, SipProfile caller) {
+      appView.sendJavascript("cordova.fireWindowEvent('ringing', {})");
+    }
   };
 
   private void connectSip(String user, String pass, String domain, CallbackContext callbackContext) {
@@ -219,10 +255,11 @@ public class SIP extends CordovaPlugin {
 
   private void callSip(String number, CallbackContext callbackContext) {
 
-    final CordovaWebView av = appView;
+    //final CordovaWebView av = appView;
 
     if (call == null) {
       try {
+        /*
         SipAudioCall.Listener listener = new SipAudioCall.Listener() {
 
           @Override
@@ -249,6 +286,7 @@ public class SIP extends CordovaPlugin {
             av.sendJavascript("cordova.fireWindowEvent('callHold', {})");
           }
         };
+        */
 
         call = mSipManager.makeAudioCall(mSipProfile.getUriString(), "sip:" + number + "@" + mSipProfile.getSipDomain() + ";user=phone", listener, 30);
 

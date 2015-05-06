@@ -30,6 +30,7 @@
           <receiver android:name=".IncomingCallReceiver" android:label="Call Receiver">
             <intent-filter>
                 <action android:name="es.sarenet.INCOMING_CALL"/>
+                <action android:name="android.net.sip.SIP_SERVICE_UP" />
             </intent-filter>
           </receiver>
       </config-file>

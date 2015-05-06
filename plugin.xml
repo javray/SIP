@@ -27,6 +27,8 @@
           <uses-feature android:name="android.hardware.wifi" android:required="true" />
           <uses-feature android:name="android.hardware.microphone" android:required="true" />
           <uses-feature android:name="android.software.sip" android:required="true" />
+      </config-file>
+       <config-file target="AndroidManifest.xml" parent="/manifest/application">
           <receiver android:name=".IncomingCallReceiver" android:label="Call Receiver">
             <intent-filter>
                 <action android:name="es.sarenet.INCOMING_CALL"/>

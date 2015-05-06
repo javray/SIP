@@ -27,7 +27,11 @@
           <uses-feature android:name="android.hardware.wifi" android:required="true" />
           <uses-feature android:name="android.hardware.microphone" android:required="true" />
           <uses-feature android:name="android.software.sip" android:required="true" />
-          <receiver android:name=".IncomingCallReceiver" android:label="Call Receiver"/>
+          <receiver android:name=".IncomingCallReceiver" android:label="Call Receiver">
+            <intent-filter>
+                <action android:name="es.sarenet.INCOMING_CALL"/>
+            </intent-filter>
+          </receiver>
       </config-file>
       <!--
       <lib-file src="src/android/libs/armeabi" arch="device" target-dir="libs"/>

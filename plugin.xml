@@ -31,6 +31,7 @@
             <intent-filter>
                 <action android:name="es.sarenet.INCOMING_CALL"/>
                 <action android:name="android.net.sip.SIP_SERVICE_UP" />
+                <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>
           </receiver>
       </config-file>

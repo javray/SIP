@@ -104,6 +104,10 @@ public class SIP extends CordovaPlugin {
 
     telephonyManager.listen(phoneStateListener, LISTEN_CALL_STATE);
 
+    Intent intent = cordova.getActivity().getIntent();
+
+    dumpIntent(intent);
+
   }
 
   private PhoneStateListener phoneStateListener = new PhoneStateListener() {
@@ -392,23 +396,6 @@ public class SIP extends CordovaPlugin {
             Log.d("SIP","[" + key + "=" + bundle.get(key)+"]");
         }
     }
-  }
-
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-
-    super.onCreate(savedInstanceState);
-
-    Log.d("SIP", "onCreate");
-
-    Intent intent = getIntent();
-    dumpIntent(intent);
-  }
-
-  @Override
-  public void onResume(boolean multitasking) {
-      Log.d("SIP", "onResume " );
-      super.onResume(multitasking);
   }
 
   @Override

@@ -223,10 +223,12 @@ public class SIP extends CordovaPlugin {
 
   private void listenSIP() {
 
+    /*
     IntentFilter filter = new IntentFilter();
     filter.addAction("com.javray.cordova.plugin.SIP.INCOMING_CALL");
     callReceiver = new SIPReceiver();
     cordova.getActivity().registerReceiver(callReceiver, filter);
+    */
 
     Intent intent = new Intent(); 
     intent.setAction("com.javray.cordova.plugin.SIP.INCOMING_CALL"); 

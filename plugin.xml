@@ -40,6 +40,12 @@
             </intent-filter>
           </receiver>
       </config-file>
+      <config-file target="AndroidManifest.xml" parent="/manifest/application/activity">
+            <intent-filter>
+                <action android:name="com.javray.cordova.plugin.SIP.INCOMING_CALL" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </config-file>
       <!--
       <lib-file src="src/android/libs/armeabi" arch="device" target-dir="libs"/>
       <lib-file src="src/android/libs/armeabi-v7a" arch="device" target-dir="libs"/>

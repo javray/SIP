@@ -57,7 +57,13 @@ public class SIPReceiver extends BroadcastReceiver {
   public static void dumpIntent(Intent i){
 
     Log.d("SIP", i.getAction());
-    Log.d("SIP", i.getData().toString());
+    Uri uri = i.getData();
+    if (uri != null) {
+      Log.d("SIP", uri.toString());
+    }
+    else {
+      Log.d("SIP", "data null");
+    }
 
     Bundle bundle = i.getExtras();
     if (bundle != null) {

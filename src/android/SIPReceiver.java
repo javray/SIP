@@ -19,6 +19,7 @@ public class SIPReceiver extends BroadcastReceiver {
   public void onReceive(Context context, Intent intent) {
 
       Log.d("SIP", "Llamada recibida");
+      Log.d("SIP", intent.getExtras().toString());
 
       ConnectivityManager conMan = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
@@ -37,10 +38,10 @@ public class SIPReceiver extends BroadcastReceiver {
         KeyguardLock keyguardLock =  keyguardManager.newKeyguardLock("TAG");
         keyguardLock.disableKeyguard();
 
-        intent = new Intent();
-        intent.setAction("com.javray.cordova.plugin.SIP.INCOMING_CALL");
-        intent.setPackage(context.getPackageName());
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        i = new Intent();
+        i.setAction("com.javray.cordova.plugin.SIP.INCOMING_CALL");
+        i.setPackage(context.getPackageName());
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
       }
   }

@@ -422,7 +422,7 @@ public class SIP extends CordovaPlugin {
           this.listenSIP();
       }
       else if (action.equals("stoplisten")) {
-          this.stopListenSIP();
+          this.stopListenSIP(callbackContext);
       }
 
       return false;

@@ -379,6 +379,32 @@ public class SIP extends CordovaPlugin {
       }
   }
 
+  public static void dumpIntent(Intent i){
+
+    Log.d("SIP", i.getAction());
+
+    Bundle bundle = i.getExtras();
+    if (bundle != null) {
+        Set<String> keys = bundle.keySet();
+        Iterator<String> it = keys.iterator();
+        while (it.hasNext()) {
+            String key = it.next();
+            Log.d("SIP","[" + key + "=" + bundle.get(key)+"]");
+        }
+    }
+  }
+
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+
+    super.onCreate(savedInstanceState);
+
+    Log.d("SIP", "onCreate");
+
+    Intent intent = getIntent();
+    dumpIntent(intent);
+  }
+
   @Override
   public void onResume(boolean multitasking) {
       Log.d("SIP", "onResume " );

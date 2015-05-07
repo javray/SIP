@@ -36,7 +36,7 @@ import android.content.BroadcastReceiver;
 
 import android.util.Log;
 
-import SIPReceiver;
+import com.javray.cordova.plugin.SIPReceiver;
 
 public class SIP extends CordovaPlugin {
 

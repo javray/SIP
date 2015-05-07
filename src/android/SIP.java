@@ -52,6 +52,7 @@ public class SIP extends CordovaPlugin {
 
   public static TelephonyManager telephonyManager = null;
 
+  /*
   public class IncomingCallReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -59,7 +60,6 @@ public class SIP extends CordovaPlugin {
 
         Log.d("SIP", "Llamada recibida");
         try {
-            /*
             SipAudioCall.Listener listener = new SipAudioCall.Listener() {
                 @Override
                 public void onRinging(SipAudioCall call, SipProfile caller) {
@@ -70,8 +70,6 @@ public class SIP extends CordovaPlugin {
                     }
                 }
             };
-            */
-            /*
             call = mSipManager.takeAudioCall(intent, listener);
             call.answerCall(30);
             call.startAudio();
@@ -79,7 +77,6 @@ public class SIP extends CordovaPlugin {
             if(incomingCall.isMuted()) {
                 incomingCall.toggleMute();
             }
-            */
             appView.sendJavascript("cordova.fireWindowEvent('incommingCall', {})");
         } catch (Exception e) {
             if (call != null) {
@@ -88,8 +85,9 @@ public class SIP extends CordovaPlugin {
         }
     }
   }
+            */
 
-  public IncomingCallReceiver callReceiver = null;
+  public SIPReceiver callReceiver = null;
 
   public SIP() {
   }

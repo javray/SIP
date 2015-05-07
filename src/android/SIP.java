@@ -287,10 +287,18 @@ public class SIP extends CordovaPlugin {
   }
 
   private void incommingCallSip() {
+
+    Log.d("SIP"; "incommingCallSip");
+
+    Intent intent = cordova.getActivity().getIntent();
+
+    dumpIntent(intent);
+
     try {
       call = mSipManager.takeAudioCall(cordova.getActivity().getIntent(), listener);
     }
     catch (SipException e) {
+      Log.d("SIP", e.toString());
     }
   }
 

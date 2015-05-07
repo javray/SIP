@@ -212,12 +212,12 @@ public class SIP extends CordovaPlugin {
   private void listenSIP() {
 
     IntentFilter filter = new IntentFilter();
-    filter.addAction("es.sarenet.INCOMING_CALL");
+    filter.addAction("com.javray.cordova.plugin.SIP.INCOMING_CALL");
     callReceiver = new SIPReceiver();
     cordova.getActivity().registerReceiver(callReceiver, filter);
 
     Intent intent = new Intent(); 
-    intent.setAction("es.sarenet.INCOMING_CALL"); 
+    intent.setAction("com.javray.cordova.plugin.SIP.INCOMING_CALL"); 
     PendingIntent pendingIntent = PendingIntent.getBroadcast(cordova.getActivity(), 0, intent, Intent.FILL_IN_DATA); 
     try {
       mSipManager.open(mSipProfile, pendingIntent, null);
@@ -227,11 +227,12 @@ public class SIP extends CordovaPlugin {
     }
   }
 
-  private void stopListenSIP() {
+  private void stopListenSIP(CallbackContext callbackContext) {
     if (callReceiver != null) {
       cordova.getActivity().unregisterReceiver(callReceiver);
       callReceiver = null;
     }
+    this.disconnectSip(callbackContext);
   }
 
   private void disconnectSip(CallbackContext callbackContext) {

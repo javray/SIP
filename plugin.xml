@@ -23,6 +23,8 @@
           <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
           <uses-permission android:name="android.permission.RECORD_AUDIO" />
           <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+          <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+          <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
           <uses-feature android:name="android.hardware.sip.voip" android:required="true" />
           <uses-feature android:name="android.hardware.wifi" android:required="true" />
@@ -32,7 +34,7 @@
        <config-file target="AndroidManifest.xml" parent="/manifest/application">
           <receiver android:name="com.javray.cordova.plugin.SIPReceiver" android:label="Call Receiver">
             <intent-filter>
-                <action android:name="es.sarenet.INCOMING_CALL"/>
+                <action android:name="com.javray.cordova.plugin.SIP.INCOMING_CALL"/>
                 <action android:name="android.net.sip.SIP_SERVICE_UP" />
                 <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>

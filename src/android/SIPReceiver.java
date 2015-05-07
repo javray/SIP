@@ -14,8 +14,8 @@ import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 
 import android.util.Log;
-import java.util.Iterator;
 
+import java.util.Iterator;
 import java.util.Set;
 
 public class SIPReceiver extends BroadcastReceiver {

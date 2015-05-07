@@ -36,6 +36,8 @@ import android.content.BroadcastReceiver;
 
 import android.util.Log;
 
+import SIPReceiver;
+
 public class SIP extends CordovaPlugin {
 
   private Context mContext;
@@ -211,7 +213,7 @@ public class SIP extends CordovaPlugin {
 
     IntentFilter filter = new IntentFilter();
     filter.addAction("es.sarenet.INCOMING_CALL");
-    callReceiver = new IncomingCallReceiver();
+    callReceiver = new SIPReceiver();
     cordova.getActivity().registerReceiver(callReceiver, filter);
 
     Intent intent = new Intent(); 

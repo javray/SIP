@@ -300,7 +300,12 @@ public class SIP extends CordovaPlugin {
     call = null;
     try {
       call = mSipManager.takeAudioCall(intent, listener);
-      Log.d("SIP", call.toString());
+      SipProfile peer = call.getPeerProfile();
+
+      if (peer != null) {
+        Log.d("SIP", peer.getUriString());
+        Log.d("SIP", peer.getUserName());
+      }
     }
     catch (SipException e) {
       Log.d("SIP", e.toString());

@@ -20,6 +20,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 public class SIPReceiver extends BroadcastReceiver {
+
   @Override
   public void onReceive(Context context, Intent intent) {
 
@@ -58,6 +59,7 @@ public class SIPReceiver extends BroadcastReceiver {
   public static void dumpIntent(Intent i){
 
     Log.d("SIP", i.getAction());
+    Log.d("SIP", Integer.toString(i.getFlags()));
     Uri uri = i.getData();
     if (uri != null) {
       Log.d("SIP", uri.toString());
@@ -65,6 +67,8 @@ public class SIPReceiver extends BroadcastReceiver {
     else {
       Log.d("SIP", "data null");
     }
+
+
 
     Bundle bundle = i.getExtras();
     if (bundle != null) {

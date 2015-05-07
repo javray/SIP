@@ -296,6 +296,7 @@ public class SIP extends CordovaPlugin {
 
     dumpIntent(intent);
 
+    call = null;
     try {
       call = mSipManager.takeAudioCall(intent, listener);
     }
@@ -382,6 +383,14 @@ public class SIP extends CordovaPlugin {
   public static void dumpIntent(Intent i){
 
     Log.d("SIP", i.getAction());
+    Log.d("SIP", Integer.toString(i.getFlags()));
+    Uri uri = i.getData();
+    if (uri != null) {
+      Log.d("SIP", uri.toString());
+    }
+    else {
+      Log.d("SIP", "data null");
+    }
 
     Bundle bundle = i.getExtras();
     if (bundle != null) {

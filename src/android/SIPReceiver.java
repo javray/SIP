@@ -32,8 +32,27 @@ public class SIPReceiver extends BroadcastReceiver {
       State wifi = conMan.getNetworkInfo(1).getState();
 
       if (wifi == State.CONNECTED || wifi == State.CONNECTING) {
+
         Log.d("SIP", "WIFI");
 
+        /*
+        SipAudioCall incomingCall = null;
+
+        try {
+
+          SipAudioCall.Listener = Listener = new SipAudioCall.Listener() {
+            @Override
+            public void onRinging(SipAudioCall call, SipProfile caller) {
+              caller
+            }
+          };
+
+          call = m
+        }
+        catch (Exception e) {
+        }
+
+        */
         PowerManager pm = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
         WakeLock wakeLock = pm.newWakeLock((PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP), "TAG");
         wakeLock.acquire();

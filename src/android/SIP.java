@@ -380,6 +380,12 @@ public class SIP extends CordovaPlugin {
   }
 
   @Override
+  public void onResume(boolean multitasking) {
+      Log.d("SIP", "onResume " );
+      super.onResume(multitasking);
+  }
+
+  @Override
   public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
 
       if (action.equals("connect")) {

@@ -227,12 +227,11 @@ public class SIP extends CordovaPlugin {
     }
   }
 
-  private void stopListenSIP(CallbackContext callbackContext) {
+  private void stopListenSIP() {
     if (callReceiver != null) {
       cordova.getActivity().unregisterReceiver(callReceiver);
       callReceiver = null;
     }
-    this.disconnectSip(callbackContext);
   }
 
   private void disconnectSip(CallbackContext callbackContext) {
@@ -422,7 +421,7 @@ public class SIP extends CordovaPlugin {
           this.listenSIP();
       }
       else if (action.equals("stoplisten")) {
-          this.stopListenSIP(callbackContext);
+          this.stopListenSIP();
       }
 
       return false;

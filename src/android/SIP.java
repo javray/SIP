@@ -289,7 +289,7 @@ public class SIP extends CordovaPlugin {
     }
   }
 
-  private void incommingCallSip() {
+  private void incommingCallSip(CallbackContext callbackContext) {
 
     Log.d("SIP", "incommingCallSip");
 
@@ -298,17 +298,24 @@ public class SIP extends CordovaPlugin {
     dumpIntent(intent);
 
     call = null;
+
     try {
       call = mSipManager.takeAudioCall(intent, listener);
+
       SipProfile peer = call.getPeerProfile();
 
       if (peer != null) {
         Log.d("SIP", peer.getUriString());
         Log.d("SIP", peer.getUserName());
+        callbackContext.success(peer.getUserName());
+      }
+      else {
+        callbackContext.success("Desconocido");
       }
     }
     catch (SipException e) {
       Log.d("SIP", e.toString());
+      callbackContext.error("Error al coger la llamada");
     }
   }
 
@@ -455,7 +462,7 @@ public class SIP extends CordovaPlugin {
           this.stopListenSIP();
       }
       else if (action.equals("incommingcall")) {
-          this.incommingCallSip();
+          this.incommingCallSip(callbackContext);
       }
 
       return false;

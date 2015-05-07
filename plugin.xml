@@ -12,6 +12,7 @@
         </feature>
       </config-file>
       <source-file src="src/android/SIP.java" target-dir="src/com/javray/cordova/plugin/SIP" />
+      <source-file src="src/android/SIPReceiver.java" target-dir="src/com/javray/cordova/plugin/SIP" />
 
       <config-file target="AndroidManifest.xml" parent="/*">
           <uses-permission android:name="android.permission.USE_SIP" />

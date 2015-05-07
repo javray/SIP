@@ -48,15 +48,7 @@ public class SIPReceiver extends BroadcastReceiver {
         intent.setAction("com.javray.cordova.plugin.SIP.INCOMING_CALL");
         intent.setPackage(context.getPackageName());
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-        if (extras != null) {
-            Set<String> keys = extras.keySet();
-            Iterator<String> it = keys.iterator();
-            while (it.hasNext()) {
-                String key = it.next();
-                intent.putExtra(key, extras.get(key));
-            }
-        }
+        intent.putExtras(extras);
 
         context.startActivity(intent);
       }

@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver;
 
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo.State;
+import android.net.Uri;
 
 import android.app.KeyguardManager;
 import android.app.KeyguardManager.KeyguardLock;

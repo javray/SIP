@@ -2,6 +2,7 @@ package com.javray.cordova.plugin;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.content.BroadcastReceiver;
 
 import android.net.ConnectivityManager;
@@ -19,7 +20,7 @@ public class SIPReceiver extends BroadcastReceiver {
   public void onReceive(Context context, Intent intent) {
 
       Log.d("SIP", "Llamada recibida");
-      Log.d("SIP", intent.getExtras().toString());
+      dumpIntent(intent);
 
       ConnectivityManager conMan = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
@@ -45,4 +46,17 @@ public class SIPReceiver extends BroadcastReceiver {
         context.startActivity(intent);
       }
   }
+
+  public static void dumpIntent(Intent i){
+
+    Bundle bundle = i.getExtras();
+    if (bundle != null) {
+        Set<String> keys = bundle.keySet();
+        Iterator<String> it = keys.iterator();
+        while (it.hasNext()) {
+            String key = it.next();
+            Log.e("SIP","[" + key + "=" + bundle.get(key)+"]");
+        }
+    }
+}
 }

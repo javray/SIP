@@ -15,7 +15,7 @@ public class SIPReceiver extends BroadcastReceiver {
 
       Log.d("SIP", "Llamada recibida");
 
-      ConnectivityManager conMan = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+      ConnectivityManager conMan = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
       //State mobile = conMan.getNetworkInfo(0).getState();
 

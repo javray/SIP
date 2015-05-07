@@ -112,6 +112,10 @@ public class SIP extends CordovaPlugin {
 
     dumpIntent(intent);
 
+    if (intent.getAction().equals("com.javray.cordova.plugin.SIP.INCOMING_CALL")) {
+      appView.sendJavascript("cordova.fireWindowEvent('incommingCall', {})");
+    }
+
   }
 
   private PhoneStateListener phoneStateListener = new PhoneStateListener() {

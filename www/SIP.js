@@ -39,4 +39,8 @@ SIP.prototype.stopListenCall = function(success, error) {
     exec(success, error, "SIP", "stoplisten", []);
 };
 
+SIP.prototype.incommingCall = function(arg0, success, error) {
+    exec(success, error, "SIP", "incommingcall", []);
+};
+
 module.exports = new SIP();

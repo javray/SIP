@@ -271,37 +271,7 @@ public class SIP extends CordovaPlugin {
 
     if (call == null) {
       try {
-        /*
-        SipAudioCall.Listener listener = new SipAudioCall.Listener() {
-
-          @Override
-          public void onCallEstablished(SipAudioCall call) {
-              stopRingbackTone();
-              call.startAudio();
-              av.sendJavascript("cordova.fireWindowEvent('callEstablished', {})");
-          }
-
-          @Override
-          public void onRingingBack(SipAudioCall call) {
-            startRingbackTone();
-            av.sendJavascript("cordova.fireWindowEvent('ringingBack', {})");
-          }
-
-          @Override
-          public void onCallEnded(SipAudioCall call) {
-            setSpeakerMode();
-            av.sendJavascript("cordova.fireWindowEvent('callEnd', {})");
-          }
-
-          @Override
-          public void onCallHeld(SipAudioCall call) {
-            av.sendJavascript("cordova.fireWindowEvent('callHold', {})");
-          }
-        };
-        */
-
         call = mSipManager.makeAudioCall(mSipProfile.getUriString(), "sip:" + number + "@" + mSipProfile.getSipDomain() + ";user=phone", listener, 30);
-
         callbackContext.success("Llamada enviada");
       }
       catch (SipException e) {
@@ -314,6 +284,10 @@ public class SIP extends CordovaPlugin {
     else {
       callbackContext.error("Hay una llamada en curso");
     }
+  }
+
+  private void incommingCallSip() {
+    call = mSipManager.takeAudioCall(cordova.getActivity().getIntent(), listener);
   }
 
   private void callSipEnd(CallbackContext callbackContext) {

@@ -61,7 +61,7 @@ public class SIPReceiver extends BroadcastReceiver {
         KeyguardLock keyguardLock =  keyguardManager.newKeyguardLock("TAG");
         keyguardLock.disableKeyguard();
 
-        intent = new Intent();
+        intent = new Intent(intent);
         intent.setAction("com.javray.cordova.plugin.SIP.INCOMING_CALL");
         intent.setPackage(context.getPackageName());
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -71,13 +71,15 @@ public class SIPReceiver extends BroadcastReceiver {
 
   public static void dumpIntent(Intent i){
 
+    Log.d("SIP", i.getAction());
+
     Bundle bundle = i.getExtras();
     if (bundle != null) {
         Set<String> keys = bundle.keySet();
         Iterator<String> it = keys.iterator();
         while (it.hasNext()) {
             String key = it.next();
-            Log.e("SIP","[" + key + "=" + bundle.get(key)+"]");
+            Log.d("SIP","[" + key + "=" + bundle.get(key)+"]");
         }
     }
 }

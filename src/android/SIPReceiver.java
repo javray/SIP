@@ -24,6 +24,7 @@ public class SIPReceiver extends BroadcastReceiver {
 
       Log.d("SIP", "Llamada recibida");
       dumpIntent(intent);
+      Bundle extras = intent.getExtras();
 
       ConnectivityManager conMan = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
@@ -35,24 +36,6 @@ public class SIPReceiver extends BroadcastReceiver {
 
         Log.d("SIP", "WIFI");
 
-        /*
-        SipAudioCall incomingCall = null;
-
-        try {
-
-          SipAudioCall.Listener = Listener = new SipAudioCall.Listener() {
-            @Override
-            public void onRinging(SipAudioCall call, SipProfile caller) {
-              caller
-            }
-          };
-
-          call = m
-        }
-        catch (Exception e) {
-        }
-
-        */
         PowerManager pm = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
         WakeLock wakeLock = pm.newWakeLock((PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP), "TAG");
         wakeLock.acquire();
@@ -61,10 +44,12 @@ public class SIPReceiver extends BroadcastReceiver {
         KeyguardLock keyguardLock =  keyguardManager.newKeyguardLock("TAG");
         keyguardLock.disableKeyguard();
 
-        intent = new Intent(intent);
+        intent = new Intent();
         intent.setAction("com.javray.cordova.plugin.SIP.INCOMING_CALL");
         intent.setPackage(context.getPackageName());
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setExtras(extras);
+
         context.startActivity(intent);
       }
   }

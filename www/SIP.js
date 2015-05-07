@@ -39,7 +39,7 @@ SIP.prototype.stopListenCall = function(success, error) {
     exec(success, error, "SIP", "stoplisten", []);
 };
 
-SIP.prototype.incommingCall = function(arg0, success, error) {
+SIP.prototype.incommingCall = function(success, error) {
     exec(success, error, "SIP", "incommingcall", []);
 };
 

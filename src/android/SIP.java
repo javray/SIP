@@ -438,6 +438,9 @@ public class SIP extends CordovaPlugin {
       else if (action.equals("stoplisten")) {
           this.stopListenSIP();
       }
+      else if (action.equals("incommingcall")) {
+          this.incommingCallSip();
+      }
 
       return false;
   }

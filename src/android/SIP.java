@@ -59,6 +59,8 @@ public class SIP extends CordovaPlugin {
 
   public static TelephonyManager telephonyManager = null;
 
+  private Intent incommingCallIntent = null;
+
   /*
   public class IncomingCallReceiver extends BroadcastReceiver {
     @Override
@@ -296,7 +298,14 @@ public class SIP extends CordovaPlugin {
 
     Log.d("SIP", "incommingCallSip");
 
-    Intent intent = cordova.getActivity().getIntent();
+    Intent intent;
+
+    if (incommingCallIntent != null) {
+      intent = incommingCallIntent;
+    }
+    else {
+      intent = cordova.getActivity().getIntent();
+    }
 
     dumpIntent(intent);
 
@@ -428,7 +437,11 @@ public class SIP extends CordovaPlugin {
     dumpIntent(intent);
 
     if (intent.getAction().equals("com.javray.cordova.plugin.SIP.INCOMING_CALL")) {
+      incommingCallIntent = intent;
       appView.sendJavascript("cordova.fireWindowEvent('incommingCall', {})");
+    }
+    else {
+      incommingCallIntent = null;
     }
   }
 

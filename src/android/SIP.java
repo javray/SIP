@@ -421,6 +421,12 @@ public class SIP extends CordovaPlugin {
   }
 
   @Override
+  public void onNewIntent(Intent intent) {
+    Log.d("SIP", "onNewIntent");
+    dumpIntent(intent);
+  }
+
+  @Override
   public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
 
       if (action.equals("connect")) {

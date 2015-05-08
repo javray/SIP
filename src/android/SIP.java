@@ -422,8 +422,14 @@ public class SIP extends CordovaPlugin {
 
   @Override
   public void onNewIntent(Intent intent) {
+
     Log.d("SIP", "onNewIntent");
+
     dumpIntent(intent);
+
+    if (intent.getAction().equals("com.javray.cordova.plugin.SIP.INCOMING_CALL")) {
+      appView.sendJavascript("cordova.fireWindowEvent('incommingCall', {})");
+    }
   }
 
   @Override

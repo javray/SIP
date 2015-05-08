@@ -97,9 +97,12 @@ public class SIP extends CordovaPlugin {
   public SIPReceiver callReceiver = null;
 
   public SIP() {
+    Log.d("SIP", "constructor");
   }
 
   public void initialize(CordovaInterface cordova, CordovaWebView webView) {
+
+    Log.d("SIP", "initialize");
 
     super.initialize(cordova, webView);
 

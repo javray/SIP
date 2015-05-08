@@ -273,6 +273,15 @@ public class SIP extends CordovaPlugin {
     }
   }
 
+  private void isConnected(CallbackContext callbackContext) {
+    if (mSipManager != null) {
+      callbackContext.success("OK");
+    }
+    else {
+      callbackContext.success("KO");
+    }
+  }
+
   private void callSip(String number, CallbackContext callbackContext) {
 
     //final CordovaWebView av = appView;
@@ -465,6 +474,9 @@ public class SIP extends CordovaPlugin {
       }
       else if (action.equals("disconnect")) {
           this.disconnectSip(callbackContext);
+      }
+      else if (action.equals("isconnected")) {
+          this.isConnected(callbackContext);
       }
       else if (action.equals("mutecall")) {
           String estado = args.getString(0);

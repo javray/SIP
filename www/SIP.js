@@ -19,6 +19,10 @@ SIP.prototype.disconnect = function(success, error) {
     exec(success, error, "SIP", "disconnect", []);
 };
 
+SIP.prototype.isConnected = function(success, error) {
+    exec(success, error, "SIP", "isconnected", []);
+};
+
 SIP.prototype.muteCall = function(arg0, success, error) {
     exec(success, error, "SIP", "mutecall", [arg0]);
 };

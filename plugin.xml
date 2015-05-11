@@ -35,8 +35,10 @@
           <receiver android:name="com.javray.cordova.plugin.SIPReceiver" android:label="Call Receiver">
             <intent-filter>
                 <action android:name="com.javray.cordova.plugin.SIP.INCOMING_CALL"/>
+                <!--
                 <action android:name="android.net.sip.SIP_SERVICE_UP" />
                 <action android:name="android.intent.action.PHONE_STATE" />
+                -->
             </intent-filter>
           </receiver>
       </config-file>

@@ -350,8 +350,14 @@ public class SIP extends CordovaPlugin {
         if (call == null) {
           try {
             SipSession session = mSipManager.createSipSession(mSipProfile, sessionListener);
+            SipProfile.Builder builder = new SipProfile.Builder("sip:" + number + "@" + mSipProfile.getSipDomain() + ";user=phone");
+
+            SipProfile peerProfile = builder.build();
+
+            call = new SipAudioCall(mContext, mSipProfile);
+            call.setListener(listener);
+            call.makecall(peerProfile, session, 30);
             //call = mSipManager.makeAudioCall(mSipProfile.getUriString(), "sip:" + number + "@" + mSipProfile.getSipDomain() + ";user=phone", listener, 30);
-            call = mSipManager.makeAudioCall(mSipProfile.getUriString(), "sip:" + number + "@" + mSipProfile.getSipDomain() + ";user=phone", session, 30);
             callbackContext.success("Llamada enviada");
           }
           catch (SipException e) {

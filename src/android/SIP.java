@@ -55,7 +55,6 @@ public class SIP extends CordovaPlugin {
   private SipManager mSipManager = null;
   private SipProfile mSipProfile = null;
   private SipAudioCall call = null;
-  private SipSession session = null;
 
   private CordovaWebView appView = null;
 
@@ -320,7 +319,6 @@ public class SIP extends CordovaPlugin {
                 mSipProfile = null;
             }
             mSipManager = null;
-            session = null;
             callbackContext.success("Perfil cerrado");
           } catch (Exception e) {
             callbackContext.error("Perfil no cerrado " + e.toString());

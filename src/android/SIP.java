@@ -168,6 +168,11 @@ public class SIP extends CordovaPlugin {
     }
 
     @Override
+    public void onChanged(SipAudioCall call) {
+      appView.sendJavascript("cordova.fireWindowEvent('change', {})");
+    }
+
+    @Override
     public void onCallEstablished(SipAudioCall call) {
         stopRingbackTone();
         call.startAudio();

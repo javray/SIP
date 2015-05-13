@@ -192,8 +192,46 @@ public class SIP extends CordovaPlugin {
     }
   };
 
-  private void connectSip(String user, String pass, String domain, CallbackContext callbackContext) {
+  private void connectSip(final String user, final String pass, final String domain, final CallbackContext callbackContext) {
 
+    cordova.getThreadPool().execute(new Runnable() {
+      public void run() {
+        mContext = cordova.getActivity();
+
+        mSipManager = SipManager.newInstance(mContext);
+
+        if (mSipManager.isVoipSupported(mContext)) {
+
+          try {
+
+            SipProfile.Builder builder = new SipProfile.Builder(user, domain);
+
+            builder.setPassword(pass);
+            builder.setOutboundProxy(domain);
+            mSipProfile = builder.build();
+
+            if (mSipManager.isOpened(mSipProfile.getUriString())) {
+
+              callbackContext.success("El perfil SIP ya está abierto");
+            }
+            else {
+
+              mSipManager.open(mSipProfile);
+
+              callbackContext.success("Perfil configurado");
+            }
+          }
+          catch (Exception e) {
+            callbackContext.error("Perfil no configurado" + e.toString());
+          }
+        }
+        else {
+          callbackContext.error("SIP no soportado");
+        }
+      }
+    });
+
+    /*
     mContext = cordova.getActivity();
 
     mSipManager = SipManager.newInstance(mContext);
@@ -226,6 +264,7 @@ public class SIP extends CordovaPlugin {
     else {
       callbackContext.error("SIP no soportado");
     }
+    */
   }
 
   private void listenSIP() {

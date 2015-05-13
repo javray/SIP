@@ -464,7 +464,7 @@ public class SIP extends CordovaPlugin {
   }
 
   @Override
-  public void onNewIntent(Intent intent) {
+  public void onNewIntent(final Intent intent) {
 
     cordova.getThreadPool().execute(new Runnable() {
       public void run() {

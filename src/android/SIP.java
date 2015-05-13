@@ -30,6 +30,7 @@ import android.media.ToneGenerator;
 import android.net.sip.SipManager;
 import android.net.sip.SipProfile;
 import android.net.sip.SipAudioCall;
+import android.net.sip.SipSession;
 import android.net.sip.SipException;
 import android.net.sip.SipRegistrationListener;
 
@@ -54,6 +55,7 @@ public class SIP extends CordovaPlugin {
   private SipManager mSipManager = null;
   private SipProfile mSipProfile = null;
   private SipAudioCall call = null;
+  private SipSession session = null;
 
   private CordovaWebView appView = null;
 
@@ -202,6 +204,15 @@ public class SIP extends CordovaPlugin {
     }
   };
 
+  private SipSession.Listener sessionListener = new SipSession.Listener() {
+
+    @Override
+    public void onCallBusy(SipSession session) {
+      Log.d("SIP", "onCallBusy");
+      appView.sendJavascript("cordova.fireWindowEvent('callEnd', {})");
+    }
+  };
+
   private void connectSip(final String user, final String pass, final String domain, final CallbackContext callbackContext) {
 
     cordova.getThreadPool().execute(new Runnable() {
@@ -227,6 +238,7 @@ public class SIP extends CordovaPlugin {
             else {
 
               mSipManager.open(mSipProfile);
+              session = mSipManager.createSipSession(mSipProfile, sessionListener);
 
               callbackContext.success("Perfil configurado");
             }
@@ -284,6 +296,7 @@ public class SIP extends CordovaPlugin {
                 mSipProfile = null;
             }
             mSipManager = null;
+            session = null;
             callbackContext.success("Perfil cerrado");
           } catch (Exception e) {
             callbackContext.error("Perfil no cerrado " + e.toString());
@@ -367,6 +380,15 @@ public class SIP extends CordovaPlugin {
           Log.d("SIP", e.toString());
           callbackContext.error("Error al coger la llamada");
         }
+      }
+    });
+  }
+
+  private void incommingCallAnswerSip(final CallbackContext callbackContext) {
+    cordova.getThreadPool().execute(new Runnable() {
+      public void run() {
+
+        Log.d("SIP", "incommingCallAnswerSip");
       }
     });
   }

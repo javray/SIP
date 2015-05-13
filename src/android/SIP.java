@@ -269,7 +269,7 @@ public class SIP extends CordovaPlugin {
         if (mSipManager != null) {
           try {
             if (mSipProfile != null) {
-                this.stopListenSIP();
+                stopListenSIP();
                 mSipManager.close(mSipProfile.getUriString());
                 mSipProfile = null;
             }

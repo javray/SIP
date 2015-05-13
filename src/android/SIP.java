@@ -417,10 +417,14 @@ public class SIP extends CordovaPlugin {
   }
 
   private void sendDtmf(int code) {
-    Log.d("SIP", "sendDtmf: " + code);
-    if (call != null) {
-      call.sendDtmf(code);
-    }
+    cordova.getThreadPool().execute(new Runnable() {
+      public void run() {
+        Log.d("SIP", "sendDtmf: " + code);
+        if (call != null) {
+          call.sendDtmf(code);
+        }
+      }
+    });
   }
 
   private synchronized void startRingbackTone() {

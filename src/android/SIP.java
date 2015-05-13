@@ -368,6 +368,8 @@ public class SIP extends CordovaPlugin {
         stopRingbackTone();
         setSpeakerMode();
 
+        Log.d("SIP", "callSipEnd");
+
         if(call != null) {
             try {
               call.endCall();

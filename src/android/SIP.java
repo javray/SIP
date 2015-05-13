@@ -230,167 +230,159 @@ public class SIP extends CordovaPlugin {
         }
       }
     });
-
-    /*
-    mContext = cordova.getActivity();
-
-    mSipManager = SipManager.newInstance(mContext);
-
-    if (mSipManager.isVoipSupported(mContext)) {
-
-      try {
-
-        SipProfile.Builder builder = new SipProfile.Builder(user, domain);
-
-        builder.setPassword(pass);
-        builder.setOutboundProxy(domain);
-        mSipProfile = builder.build();
-
-        if (mSipManager.isOpened(mSipProfile.getUriString())) {
-
-          callbackContext.success("El perfil SIP ya está abierto");
-        }
-        else {
-
-          mSipManager.open(mSipProfile);
-
-          callbackContext.success("Perfil configurado");
-        }
-      }
-      catch (Exception e) {
-        callbackContext.error("Perfil no configurado" + e.toString());
-      }
-    }
-    else {
-      callbackContext.error("SIP no soportado");
-    }
-    */
   }
 
   private void listenSIP() {
 
-    Intent intent = new Intent(); 
-    intent.setAction("com.javray.cordova.plugin.SIP.INCOMING_CALL"); 
-    pendingCallIntent = PendingIntent.getBroadcast(cordova.getActivity(), 0, intent, Intent.FILL_IN_DATA); 
-    try {
-      mSipManager.open(mSipProfile, pendingCallIntent, null);
-    }
-    catch (SipException e) {
-      Log.d("SIP", "Cant open SIP Manager form incomming calls");
-    }
+    cordova.getThreadPool().execute(new Runnable() {
+      public void run() {
+        Intent intent = new Intent(); 
+        intent.setAction("com.javray.cordova.plugin.SIP.INCOMING_CALL"); 
+        pendingCallIntent = PendingIntent.getBroadcast(cordova.getActivity(), 0, intent, Intent.FILL_IN_DATA); 
+        try {
+          mSipManager.open(mSipProfile, pendingCallIntent, null);
+        }
+        catch (SipException e) {
+          Log.d("SIP", "Cant open SIP Manager form incomming calls");
+        }
+      }
+    });
   }
 
   private void stopListenSIP() {
-    if (pendingCallIntent != null) {
-      pendingCallIntent.cancel();
-      pendingCallIntent = null;
-    }
-  }
-
-  private void disconnectSip(CallbackContext callbackContext) {
-    if (call != null) {
-        call.close();
-    }
-    if (mSipManager != null) {
-      try {
-        if (mSipProfile != null) {
-            this.stopListenSIP();
-            mSipManager.close(mSipProfile.getUriString());
-            mSipProfile = null;
+    cordova.getThreadPool().execute(new Runnable() {
+      public void run() {
+        if (pendingCallIntent != null) {
+          pendingCallIntent.cancel();
+          pendingCallIntent = null;
         }
-        mSipManager = null;
-        callbackContext.success("Perfil cerrado");
-      } catch (Exception e) {
-        callbackContext.error("Perfil no cerrado " + e.toString());
       }
-    }
+    });
   }
 
-  private void isConnected(CallbackContext callbackContext) {
-    if (mSipManager != null) {
-      callbackContext.success("OK");
-    }
-    else {
-      callbackContext.success("KO");
-    }
-  }
-
-  private void callSip(String number, CallbackContext callbackContext) {
-
-    //final CordovaWebView av = appView;
-
-    if (call == null) {
-      try {
-        call = mSipManager.makeAudioCall(mSipProfile.getUriString(), "sip:" + number + "@" + mSipProfile.getSipDomain() + ";user=phone", listener, 30);
-        callbackContext.success("Llamada enviada");
-      }
-      catch (SipException e) {
-        callbackContext.error("error " + e.toString());
+  private void disconnectSip(final CallbackContext callbackContext) {
+    cordova.getThreadPool().execute(new Runnable() {
+      public void run() {
         if (call != null) {
-          call.close();
+            call.close();
+        }
+        if (mSipManager != null) {
+          try {
+            if (mSipProfile != null) {
+                this.stopListenSIP();
+                mSipManager.close(mSipProfile.getUriString());
+                mSipProfile = null;
+            }
+            mSipManager = null;
+            callbackContext.success("Perfil cerrado");
+          } catch (Exception e) {
+            callbackContext.error("Perfil no cerrado " + e.toString());
+          }
         }
       }
-    }
-    else {
-      callbackContext.error("Hay una llamada en curso");
-    }
+    });
   }
 
-  private void incommingCallSip(CallbackContext callbackContext) {
-
-    Log.d("SIP", "incommingCallSip");
-
-    Intent intent;
-
-    if (incommingCallIntent != null) {
-      intent = incommingCallIntent;
-    }
-    else {
-      intent = cordova.getActivity().getIntent();
-    }
-
-    dumpIntent(intent);
-
-    call = null;
-
-    try {
-      call = mSipManager.takeAudioCall(intent, listener);
-
-      SipProfile peer = call.getPeerProfile();
-
-      if (peer != null) {
-        Log.d("SIP", peer.getUriString());
-        Log.d("SIP", peer.getUserName());
-        callbackContext.success(peer.getUserName());
-      }
-      else {
-        callbackContext.success("Desconocido");
-      }
-    }
-    catch (SipException e) {
-      Log.d("SIP", e.toString());
-      callbackContext.error("Error al coger la llamada");
-    }
-  }
-
-  private void callSipEnd(CallbackContext callbackContext) {
-
-    stopRingbackTone();
-    setSpeakerMode();
-
-    if(call != null) {
-        try {
-          call.endCall();
-        } catch (SipException se) {
-          callbackContext.error("Error al finalizar la llamada " + se.toString());
+  private void isConnected(final CallbackContext callbackContext) {
+    cordova.getThreadPool().execute(new Runnable() {
+      public void run() {
+      if (mSipManager != null) {
+          callbackContext.success("OK");
         }
-        call.close();
+        else {
+          callbackContext.success("KO");
+        }
+      }
+    });
+  }
+
+  private void callSip(final String number, final CallbackContext callbackContext) {
+
+    cordova.getThreadPool().execute(new Runnable() {
+      public void run() {
+        if (call == null) {
+          try {
+            call = mSipManager.makeAudioCall(mSipProfile.getUriString(), "sip:" + number + "@" + mSipProfile.getSipDomain() + ";user=phone", listener, 30);
+            callbackContext.success("Llamada enviada");
+          }
+          catch (SipException e) {
+            callbackContext.error("error " + e.toString());
+            if (call != null) {
+              call.close();
+            }
+          }
+        }
+        else {
+          callbackContext.error("Hay una llamada en curso");
+        }
+      }
+    });
+  }
+
+  private void incommingCallSip(final CallbackContext callbackContext) {
+
+    cordova.getThreadPool().execute(new Runnable() {
+      public void run() {
+
+        Log.d("SIP", "incommingCallSip");
+
+        Intent intent;
+
+        if (incommingCallIntent != null) {
+          intent = incommingCallIntent;
+        }
+        else {
+          intent = cordova.getActivity().getIntent();
+        }
+
+        dumpIntent(intent);
+
         call = null;
-        callbackContext.success("Llamada finalizada");
-    }
-    else {
-      callbackContext.error("No hay niguna llamada en curso");
-    }
+
+        try {
+          call = mSipManager.takeAudioCall(intent, listener);
+
+          SipProfile peer = call.getPeerProfile();
+
+          if (peer != null) {
+            Log.d("SIP", peer.getUriString());
+            Log.d("SIP", peer.getUserName());
+            callbackContext.success(peer.getUserName());
+          }
+          else {
+            callbackContext.success("Desconocido");
+          }
+        }
+        catch (SipException e) {
+          Log.d("SIP", e.toString());
+          callbackContext.error("Error al coger la llamada");
+        }
+      }
+    });
+  }
+
+  private void callSipEnd(final CallbackContext callbackContext) {
+
+    cordova.getThreadPool().execute(new Runnable() {
+      public void run() {
+        stopRingbackTone();
+        setSpeakerMode();
+
+        if(call != null) {
+            try {
+              call.endCall();
+            } catch (SipException se) {
+              callbackContext.error("Error al finalizar la llamada " + se.toString());
+            }
+            call.close();
+            call = null;
+            callbackContext.success("Llamada finalizada");
+        }
+        else {
+          callbackContext.error("No hay niguna llamada en curso");
+        }
+      }
+    });
   }
 
   private void setInCallMode() {
@@ -474,17 +466,21 @@ public class SIP extends CordovaPlugin {
   @Override
   public void onNewIntent(Intent intent) {
 
-    Log.d("SIP", "onNewIntent");
+    cordova.getThreadPool().execute(new Runnable() {
+      public void run() {
+        Log.d("SIP", "onNewIntent");
 
-    dumpIntent(intent);
+        dumpIntent(intent);
 
-    if (intent.getAction().equals("com.javray.cordova.plugin.SIP.INCOMING_CALL")) {
-      incommingCallIntent = intent;
-      appView.sendJavascript("cordova.fireWindowEvent('incommingCall', {})");
-    }
-    else {
-      incommingCallIntent = null;
-    }
+        if (intent.getAction().equals("com.javray.cordova.plugin.SIP.INCOMING_CALL")) {
+          incommingCallIntent = intent;
+          appView.sendJavascript("cordova.fireWindowEvent('incommingCall', {})");
+        }
+        else {
+          incommingCallIntent = null;
+        }
+      }
+    });
   }
 
   @Override
@@ -502,19 +498,24 @@ public class SIP extends CordovaPlugin {
           String number = args.getString(0);
 
           this.callSip(number, callbackContext);
+          return true;
       }
       else if (action.equals("endcall")) {
           this.callSipEnd(callbackContext);
+          return true;
       }
       else if (action.equals("disconnect")) {
           this.disconnectSip(callbackContext);
+          return true;
       }
       else if (action.equals("isconnected")) {
           this.isConnected(callbackContext);
+          return true;
       }
       else if (action.equals("mutecall")) {
           String estado = args.getString(0);
           this.muteMicrophone(estado.equals("on"));
+          return true;
       }
       else if (action.equals("speakercall")) {
           String estado = args.getString(0);
@@ -524,19 +525,24 @@ public class SIP extends CordovaPlugin {
           else {
             this.setInCallMode();
           }
+          return true;
       }
       else if (action.equals("dtmfcall")) {
           int code = args.getInt(0);
           this.sendDtmf(code);
+          return true;
       }
       else if (action.equals("listen")) {
           this.listenSIP();
+          return true;
       }
       else if (action.equals("stoplisten")) {
           this.stopListenSIP();
+          return true;
       }
       else if (action.equals("incommingcall")) {
           this.incommingCallSip(callbackContext);
+          return true;
       }
 
       return false;

@@ -237,8 +237,8 @@ public class SIP extends CordovaPlugin {
             }
             else {
 
-              mSipManager.open(mSipProfile);
               session = mSipManager.createSipSession(mSipProfile, sessionListener);
+              mSipManager.open(mSipProfile);
 
               callbackContext.success("Perfil configurado");
             }

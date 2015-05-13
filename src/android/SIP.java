@@ -416,7 +416,7 @@ public class SIP extends CordovaPlugin {
     am.setMicrophoneMute(state);
   }
 
-  private void sendDtmf(int code) {
+  private void sendDtmf(final int code) {
     cordova.getThreadPool().execute(new Runnable() {
       public void run() {
         Log.d("SIP", "sendDtmf: " + code);

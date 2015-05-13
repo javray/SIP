@@ -213,25 +213,25 @@ public class SIP extends CordovaPlugin {
 
     @Override
     public void onCallEstablished(SipSession session, String description) {
-        stopRingbackTone();
-        call.startAudio();
+      Log.d("SIP", "onCallEstablished");
         appView.sendJavascript("cordova.fireWindowEvent('callEstablished', {})");
     }
 
     @Override
     public void onRingingBack(SipSession session) {
-      startRingbackTone();
+      Log.d("SIP", "onRingingBack");
       appView.sendJavascript("cordova.fireWindowEvent('ringingBack', {})");
     }
 
     @Override
     public void onCallEnded(SipSession session) {
-      setSpeakerMode();
+      Log.d("SIP", "onCallEnded");
       appView.sendJavascript("cordova.fireWindowEvent('callEnd', {})");
     }
 
     @Override
     public void onRinging(SipSession session, SipProfile caller, String description) {
+      Log.d("SIP", "onRinging");
       appView.sendJavascript("cordova.fireWindowEvent('ringing', {})");
     }
 

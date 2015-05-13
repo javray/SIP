@@ -34,7 +34,7 @@ public class SIPReceiver extends BroadcastReceiver {
 
       State wifi = conMan.getNetworkInfo(1).getState();
 
-      if (wifi == State.CONNECTED || wifi == State.CONNECTING) {
+      if (wifi == State.CONNECTED || wifi == State.CONNECTIN''eG) {
 
         Log.d("SIP", "WIFI");
 

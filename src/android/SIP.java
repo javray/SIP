@@ -60,6 +60,7 @@ public class SIP extends CordovaPlugin {
   public static TelephonyManager telephonyManager = null;
 
   private Intent incommingCallIntent = null;
+  private PendingIntent pendingCallIntent = null;
 
   /*
   public class IncomingCallReceiver extends BroadcastReceiver {
@@ -229,18 +230,11 @@ public class SIP extends CordovaPlugin {
 
   private void listenSIP() {
 
-    /*
-    IntentFilter filter = new IntentFilter();
-    filter.addAction("com.javray.cordova.plugin.SIP.INCOMING_CALL");
-    callReceiver = new SIPReceiver();
-    cordova.getActivity().registerReceiver(callReceiver, filter);
-    */
-
     Intent intent = new Intent(); 
     intent.setAction("com.javray.cordova.plugin.SIP.INCOMING_CALL"); 
-    PendingIntent pendingIntent = PendingIntent.getBroadcast(cordova.getActivity(), 0, intent, Intent.FILL_IN_DATA); 
+    pendingCallIntent = PendingIntent.getBroadcast(cordova.getActivity(), 0, intent, Intent.FILL_IN_DATA); 
     try {
-      mSipManager.open(mSipProfile, pendingIntent, null);
+      mSipManager.open(mSipProfile, pendingCallIntent, null);
     }
     catch (SipException e) {
       Log.d("SIP", "Cant open SIP Manager form incomming calls");
@@ -248,9 +242,9 @@ public class SIP extends CordovaPlugin {
   }
 
   private void stopListenSIP() {
-    if (callReceiver != null) {
-      cordova.getActivity().unregisterReceiver(callReceiver);
-      callReceiver = null;
+    if (pendingCallIntent != null) {
+      pendingCallIntent.cancel();
+      pendingCallIntent = null;
     }
   }
 

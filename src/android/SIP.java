@@ -400,10 +400,14 @@ public class SIP extends CordovaPlugin {
   }
 
   private void setSpeakerMode() {
-    Log.d("SIP", "setSpeakerMode");
-    AudioManager am = ((AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE));
-    am.setMode(AudioManager.MODE_NORMAL);
-    am.setSpeakerphoneOn(true);
+    cordova.getThreadPool().execute(new Runnable() {
+      public void run() {
+        Log.d("SIP", "setSpeakerMode");
+        AudioManager am = ((AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE));
+        am.setMode(AudioManager.MODE_NORMAL);
+        am.setSpeakerphoneOn(true);
+      }
+    });
   }
 
   private void muteMicrophone(Boolean state) {

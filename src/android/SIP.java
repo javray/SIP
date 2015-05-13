@@ -496,6 +496,7 @@ public class SIP extends CordovaPlugin {
           String domain = args.getString(2);
 
           this.connectSip(user, pass, domain, callbackContext);
+          return true;
       }
       else if (action.equals("makecall")) {
           String number = args.getString(0);

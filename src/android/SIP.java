@@ -211,6 +211,31 @@ public class SIP extends CordovaPlugin {
       Log.d("SIP", "onCallBusy");
       appView.sendJavascript("cordova.fireWindowEvent('callEnd', {})");
     }
+
+    @Override
+    public void onCallEstablished(SipSession session, String description) {
+        stopRingbackTone();
+        call.startAudio();
+        appView.sendJavascript("cordova.fireWindowEvent('callEstablished', {})");
+    }
+
+    @Override
+    public void onRingingBack(SipSession session) {
+      startRingbackTone();
+      appView.sendJavascript("cordova.fireWindowEvent('ringingBack', {})");
+    }
+
+    @Override
+    public void onCallEnded(SipSession session) {
+      setSpeakerMode();
+      appView.sendJavascript("cordova.fireWindowEvent('callEnd', {})");
+    }
+
+    @Override
+    public void onRinging(SipSession session, SipProfile caller, String description) {
+      appView.sendJavascript("cordova.fireWindowEvent('ringing', {})");
+    }
+
   };
 
   private void connectSip(final String user, final String pass, final String domain, final CallbackContext callbackContext) {
@@ -237,7 +262,6 @@ public class SIP extends CordovaPlugin {
             }
             else {
 
-              session = mSipManager.createSipSession(mSipProfile, sessionListener);
               mSipManager.open(mSipProfile);
 
               callbackContext.success("Perfil configurado");
@@ -325,7 +349,9 @@ public class SIP extends CordovaPlugin {
       public void run() {
         if (call == null) {
           try {
-            call = mSipManager.makeAudioCall(mSipProfile.getUriString(), "sip:" + number + "@" + mSipProfile.getSipDomain() + ";user=phone", listener, 30);
+            SipSession session = mSipManager.createSipSession(mSipProfile, sessionListener);
+            //call = mSipManager.makeAudioCall(mSipProfile.getUriString(), "sip:" + number + "@" + mSipProfile.getSipDomain() + ";user=phone", listener, 30);
+            call = mSipManager.makeAudioCall(mSipProfile.getUriString(), "sip:" + number + "@" + mSipProfile.getSipDomain() + ";user=phone", session, 30);
             callbackContext.success("Llamada enviada");
           }
           catch (SipException e) {

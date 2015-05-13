@@ -163,6 +163,11 @@ public class SIP extends CordovaPlugin {
   private SipAudioCall.Listener listener = new SipAudioCall.Listener() {
 
     @Override
+    public void onError(SipAudioCall call, int code, String message) {
+      appView.sendJavascript("cordova.fireWindowEvent('error', {'code':" + Integer.toString(code) + ",'message': '" + message + "'})");
+    }
+
+    @Override
     public void onCallEstablished(SipAudioCall call) {
         stopRingbackTone();
         call.startAudio();
@@ -364,7 +369,9 @@ public class SIP extends CordovaPlugin {
   private void callSipEnd(final CallbackContext callbackContext) {
 
     cordova.getThreadPool().execute(new Runnable() {
+
       public void run() {
+
         stopRingbackTone();
         setSpeakerMode();
 

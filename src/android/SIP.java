@@ -430,7 +430,7 @@ public class SIP extends CordovaPlugin {
 
           callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, json));
         }
-        catch (SipException e) {
+        catch (Exception e) {
           Log.d("SIP", e.toString());
           callbackContext.error("Error al coger la llamada");
         }

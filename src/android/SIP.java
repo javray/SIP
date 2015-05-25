@@ -370,7 +370,7 @@ public class SIP extends CordovaPlugin {
 
             call = new SipAudioCall(mContext, mSipProfile);
             call.setListener(listener);
-            call.makeCall(peerProfile, session, 0);
+            call.makeCall(peerProfile, session, 10);
             //call = mSipManager.makeAudioCall(mSipProfile.getUriString(), "sip:" + number + "@" + mSipProfile.getSipDomain() + ";user=phone", listener, 30);
             callbackContext.success("Llamada enviada");
           }
@@ -445,7 +445,7 @@ public class SIP extends CordovaPlugin {
         Log.d("SIP", "incommingCallAnswerSip");
 
         try {
-            call.answerCall(30);
+            call.answerCall(10);
             StopRingtone();
         } catch (Exception e) {
             callbackContext.error("Error al contestar la llamada " + e.toString());

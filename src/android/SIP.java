@@ -248,7 +248,7 @@ public class SIP extends CordovaPlugin {
 
   };
 
-  private void connectSip(final String user, final String pass, final String domain, final CallbackContext callbackContext) {
+  private void connectSip(final String tel, final String user, final String pass, final String domain, final CallbackContext callbackContext) {
 
     cordova.getThreadPool().execute(new Runnable() {
       public void run() {
@@ -264,6 +264,7 @@ public class SIP extends CordovaPlugin {
 
             builder.setPassword(pass);
             builder.setOutboundProxy(domain);
+            builder.setDisplayName(tel);
             mSipProfile = builder.build();
 
             if (mSipManager.isOpened(mSipProfile.getUriString())) {
@@ -602,11 +603,12 @@ public class SIP extends CordovaPlugin {
   public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
 
       if (action.equals("connect")) {
-          String user = args.getString(0);
-          String pass = args.getString(1);
-          String domain = args.getString(2);
+          String tel = args.getString(0);
+          String user = args.getString(1);
+          String pass = args.getString(2);
+          String domain = args.getString(3);
 
-          this.connectSip(user, pass, domain, callbackContext);
+          this.connectSip(tel, user, pass, domain, callbackContext);
           return true;
       }
       else if (action.equals("makecall")) {

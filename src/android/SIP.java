@@ -424,6 +424,7 @@ public class SIP extends CordovaPlugin {
 
         try {
             call.answerCall(30);
+            StopRingtone();
         } catch (Exception e) {
             callbackContext.error("Error al contestar la llamada " + e.toString());
         }

@@ -206,6 +206,11 @@ public class SIP extends CordovaPlugin {
   private SipSession.Listener sessionListener = new SipSession.Listener() {
 
     @Override
+    public void onError(SipSession session, int code, String message) {
+      appView.sendJavascript("cordova.fireWindowEvent('error', {'code':" + Integer.toString(code) + ",'message': '" + message + "'})");
+    }
+
+    @Override
     public void onCallBusy(SipSession session) {
       Log.d("SIP", "onCallBusy");
       appView.sendJavascript("cordova.fireWindowEvent('callEnd', {})");
@@ -354,7 +359,7 @@ public class SIP extends CordovaPlugin {
 
             call = new SipAudioCall(mContext, mSipProfile);
             call.setListener(listener);
-            call.makeCall(peerProfile, session, 30);
+            call.makeCall(peerProfile, session, 0);
             //call = mSipManager.makeAudioCall(mSipProfile.getUriString(), "sip:" + number + "@" + mSipProfile.getSipDomain() + ";user=phone", listener, 30);
             callbackContext.success("Llamada enviada");
           }

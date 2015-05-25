@@ -62,6 +62,7 @@ public class SIP extends CordovaPlugin {
 
   private Intent incommingCallIntent = null;
   private PendingIntent pendingCallIntent = null;
+  private Ringtone mRingtone = null;
 
   /*
   public class IncomingCallReceiver extends BroadcastReceiver {
@@ -397,6 +398,8 @@ public class SIP extends CordovaPlugin {
 
           SipProfile peer = call.getPeerProfile();
 
+          StartRingtone();
+
           if (peer != null) {
             Log.d("SIP", peer.getUriString());
             Log.d("SIP", peer.getUserName());
@@ -430,6 +433,7 @@ public class SIP extends CordovaPlugin {
       public void run() {
 
         stopRingbackTone();
+        StopRingtone();
         setSpeakerMode();
 
         Log.d("SIP", "callSipEnd");
@@ -491,6 +495,19 @@ public class SIP extends CordovaPlugin {
         }
       }
     });
+  }
+  private void StartRingtone() {
+      Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
+      mRingtone = RingtoneManager.getRingtone(mContext, notification);
+      mRingtone.play();
+  }
+
+  private void StopRingtone() {
+
+      if (mRingtone != null) {
+        mRingtone.stop();
+        mRingtone = null;
+      }
   }
 
   private synchronized void startRingbackTone() {

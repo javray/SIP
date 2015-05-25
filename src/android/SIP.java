@@ -262,6 +262,8 @@ public class SIP extends CordovaPlugin {
 
             SipProfile.Builder builder = new SipProfile.Builder(user, domain);
 
+            Log.d("SIP", "Tel:" + tel);
+
             builder.setPassword(pass);
             builder.setOutboundProxy(domain);
             builder.setDisplayName(tel);
@@ -416,7 +418,7 @@ public class SIP extends CordovaPlugin {
             Log.d("SIP", peer.getUriString());
             Log.d("SIP", peer.getUserName());
             //callbackContext.success(peer.getUserName());
-            callbackContext.success(peer.getDisplayName());
+            callbackContext.success("{'displayName':'" + peer.getDisplayName() + "','user':'" + peer.getUserName() + "'}");
           }
           else {
             callbackContext.success("Desconocido");

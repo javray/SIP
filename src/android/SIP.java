@@ -4,6 +4,7 @@ import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CordovaWebView;
 import org.apache.cordova.CallbackContext;
+import org.apache.cordova.PluginResult;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -413,16 +414,21 @@ public class SIP extends CordovaPlugin {
           SipProfile peer = call.getPeerProfile();
 
           StartRingtone();
+          JSONObject json = new JSONObject();
+
+          json.put("displayName", "Desconocido");
+          json.put("user", "Desconocido");
 
           if (peer != null) {
+
             Log.d("SIP", peer.getUriString());
             Log.d("SIP", peer.getUserName());
-            //callbackContext.success(peer.getUserName());
-            callbackContext.success("{'displayName':'" + peer.getDisplayName() + "','user':'" + peer.getUserName() + "'}");
+
+            json.put("displayName", peer.getDisplayName());
+            json.put("user", peer.getUserName());
           }
-          else {
-            callbackContext.success("Desconocido");
-          }
+
+          callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, json));
         }
         catch (SipException e) {
           Log.d("SIP", e.toString());

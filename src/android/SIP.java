@@ -170,7 +170,7 @@ public class SIP extends CordovaPlugin {
 
     @Override
     public void onChanged(SipAudioCall call) {
-      appView.sendJavascript("cordova.fireWindowEvent('change', {})");
+      appView.sendJavascript("cordova.fireWindowEvent('change', {'state':" + Integer.toString(call.getState()) + "})");
     }
 
     @Override
@@ -184,6 +184,12 @@ public class SIP extends CordovaPlugin {
     public void onRingingBack(SipAudioCall call) {
       startRingbackTone();
       appView.sendJavascript("cordova.fireWindowEvent('ringingBack', {})");
+    }
+
+    @Override
+    public void onCallBusy(SipAudioCall call) {
+      setSpeakerMode();
+      appView.sendJavascript("cordova.fireWindowEvent('callEnd', {})");
     }
 
     @Override

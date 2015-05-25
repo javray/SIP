@@ -47,4 +47,8 @@ SIP.prototype.incommingCall = function(success, error) {
     exec(success, error, "SIP", "incommingcall", []);
 };
 
+SIP.prototype.answerCall = function(success, error) {
+    exec(success, error, "SIP", "answercall", []);
+};
+
 module.exports = new SIP();

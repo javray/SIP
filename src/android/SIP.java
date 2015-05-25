@@ -421,6 +421,8 @@ public class SIP extends CordovaPlugin {
       public void run() {
 
         Log.d("SIP", "incommingCallAnswerSip");
+        call.answerCall(30);
+        callbackContext.success("Llamada contestada");
       }
     });
   }
@@ -636,6 +638,10 @@ public class SIP extends CordovaPlugin {
       }
       else if (action.equals("incommingcall")) {
           this.incommingCallSip(callbackContext);
+          return true;
+      }
+      else if (action.equals("answercall")) {
+          this.incommingCallAnswerSip(callbackContext);
           return true;
       }
 

@@ -165,6 +165,8 @@ public class SIP extends CordovaPlugin {
 
     @Override
     public void onError(SipAudioCall call, int code, String message) {
+      call.close();
+      call = null;
       appView.sendJavascript("cordova.fireWindowEvent('error', {'code':" + Integer.toString(code) + ",'message': '" + message + "'})");
     }
 

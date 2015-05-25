@@ -215,7 +215,7 @@ public class SIP extends CordovaPlugin {
 
     @Override
     public void onError(SipSession session, int code, String message) {
-      appView.sendJavascript("cordova.fireWindowEvent('error', {'code':" + Integer.toString(code) + ",'message': '" + message + "'})");
+      appView.sendJavascript("cordova.fireWindowEvent('error', {'code':" + Integer.toString(code) + ",'message': '" + message + " - EO'})");
     }
 
     @Override

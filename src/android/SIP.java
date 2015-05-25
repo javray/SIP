@@ -421,7 +421,12 @@ public class SIP extends CordovaPlugin {
       public void run() {
 
         Log.d("SIP", "incommingCallAnswerSip");
-        call.answerCall(30);
+
+        try {
+            call.answerCall(30);
+        } catch (Exception e) {
+            callbackContext.error("Error al contestar la llamada " + e.toString());
+        }
         callbackContext.success("Llamada contestada");
       }
     });

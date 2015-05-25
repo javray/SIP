@@ -165,8 +165,6 @@ public class SIP extends CordovaPlugin {
 
     @Override
     public void onError(SipAudioCall call, int code, String message) {
-      call.close();
-      call = null;
       appView.sendJavascript("cordova.fireWindowEvent('error', {'code':" + Integer.toString(code) + ",'message': '" + message + "'})");
     }
 
@@ -415,7 +413,8 @@ public class SIP extends CordovaPlugin {
           if (peer != null) {
             Log.d("SIP", peer.getUriString());
             Log.d("SIP", peer.getUserName());
-            callbackContext.success(peer.getUserName());
+            //callbackContext.success(peer.getUserName());
+            callbackContext.success(peer.getDisplayName());
           }
           else {
             callbackContext.success("Desconocido");

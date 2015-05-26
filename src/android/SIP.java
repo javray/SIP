@@ -473,8 +473,13 @@ public class SIP extends CordovaPlugin {
         Log.d("SIP", "callSipEnd");
 
         if (incommingCallIntent != null) {
-          SipSession s = mSipManager.getSessionFor(incommingCallIntent);
-          s.endCall();
+          try {
+            SipSession s = mSipManager.getSessionFor(incommingCallIntent);
+            s.endCall();
+          }
+          catch(Exception e) {
+            Log.d("SIP", e.toString());
+          }
         }
 
         if(call != null) {

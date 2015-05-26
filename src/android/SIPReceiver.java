@@ -61,7 +61,7 @@ public class SIPReceiver extends BroadcastReceiver {
         try {
           SipManager mSipManager = SipManager.newInstance(context);
           SipAudioCall call = mSipManager.takeAudioCall(intent, null);
-          call.endCall();
+          //call.endCall();
           call.close();
         }
         catch (Exception e) {

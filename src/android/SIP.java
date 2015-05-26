@@ -407,8 +407,6 @@ public class SIP extends CordovaPlugin {
           intent = cordova.getActivity().getIntent();
         }
 
-        incommingCallIntent = intent;
-
         dumpIntent(intent);
 
         call = null;
@@ -471,16 +469,6 @@ public class SIP extends CordovaPlugin {
         setSpeakerMode();
 
         Log.d("SIP", "callSipEnd");
-
-        if (incommingCallIntent != null) {
-          try {
-            SipSession s = mSipManager.getSessionFor(incommingCallIntent);
-            s.endCall();
-          }
-          catch(Exception e) {
-            Log.d("SIP", e.toString());
-          }
-        }
 
         if(call != null) {
             try {

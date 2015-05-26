@@ -189,6 +189,8 @@ public class SIP extends CordovaPlugin {
 
     @Override
     public void onCallBusy(SipAudioCall call) {
+      Log.d("SIP", "onCallBusy - call");
+      Log.d("SIP", Integer.toString(call.getState()));
       setSpeakerMode();
       appView.sendJavascript("cordova.fireWindowEvent('callBusy', {})");
     }
@@ -219,7 +221,7 @@ public class SIP extends CordovaPlugin {
 
     @Override
     public void onCallBusy(SipSession session) {
-      Log.d("SIP", "onCallBusy");
+      Log.d("SIP", "onCallBusy - session");
       appView.sendJavascript("cordova.fireWindowEvent('callBusy', {})");
     }
 

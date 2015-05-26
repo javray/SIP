@@ -14,6 +14,9 @@ import android.app.KeyguardManager.KeyguardLock;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 
+import android.net.sip.SipManager;
+import android.net.sip.SipAudioCall;
+
 import android.util.Log;
 
 import java.util.Iterator;
@@ -53,6 +56,12 @@ public class SIPReceiver extends BroadcastReceiver {
         intent.putExtras(extras);
 
         context.startActivity(intent);
+      }
+      else {
+        SipManager mSipManager = SipManager.newInstance(context);
+        SipAudioCall call = mSipManager.takeAudioCall(intent, null);
+        call.endCall();
+        call.close();
       }
   }
 

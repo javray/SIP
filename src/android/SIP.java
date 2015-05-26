@@ -190,7 +190,7 @@ public class SIP extends CordovaPlugin {
     @Override
     public void onCallBusy(SipAudioCall call) {
       setSpeakerMode();
-      appView.sendJavascript("cordova.fireWindowEvent('callEnd', {})");
+      appView.sendJavascript("cordova.fireWindowEvent('callBusy', {})");
     }
 
     @Override
@@ -220,7 +220,7 @@ public class SIP extends CordovaPlugin {
     @Override
     public void onCallBusy(SipSession session) {
       Log.d("SIP", "onCallBusy");
-      appView.sendJavascript("cordova.fireWindowEvent('callEnd', {})");
+      appView.sendJavascript("cordova.fireWindowEvent('callBusy', {})");
     }
 
     @Override

@@ -15,7 +15,7 @@ import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 
 import android.net.sip.SipManager;
-import android.net.sip.SipAudioCall;
+import android.net.sip.SipSession;
 
 import android.util.Log;
 
@@ -60,9 +60,8 @@ public class SIPReceiver extends BroadcastReceiver {
       else {
         try {
           SipManager mSipManager = SipManager.newInstance(context);
-          SipAudioCall call = mSipManager.takeAudioCall(intent, null);
-          //call.endCall();
-          call.close();
+          SipSession session = mSipManager.getSessionFor(intent);
+          session.endCall();
         }
         catch (Exception e) {
           Log.d("SIP", e.toString());

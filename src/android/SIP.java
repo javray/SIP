@@ -197,6 +197,7 @@ public class SIP extends CordovaPlugin {
 
     @Override
     public void onCallEnded(SipAudioCall call) {
+      Log.d("SIP", "onCallEnded- call");
       setSpeakerMode();
       appView.sendJavascript("cordova.fireWindowEvent('callEnd', {})");
     }
@@ -239,7 +240,7 @@ public class SIP extends CordovaPlugin {
 
     @Override
     public void onCallEnded(SipSession session) {
-      Log.d("SIP", "onCallEnded");
+      Log.d("SIP", "onCallEnded - session");
       appView.sendJavascript("cordova.fireWindowEvent('callEnd', {})");
     }
 

@@ -4,7 +4,7 @@ function SIP() {
 }
 
 SIP.prototype.connect = function(arg0, arg1, arg2, arg3, success, error) {
-    exec(success, error, "SIP", "connect", [arg0, arg1, arg2, arg3]);
+    exec(success, error, "SIP", "connect", [arg0, arg1, arg2]);
 };
 
 SIP.prototype.makeCall = function(arg0, success, error) {

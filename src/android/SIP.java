@@ -64,41 +64,6 @@ public class SIP extends CordovaPlugin {
   private PendingIntent pendingCallIntent = null;
   private Ringtone mRingtone = null;
 
-  /*
-  public class IncomingCallReceiver extends BroadcastReceiver {
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        //SipAudioCall incomingCall = null;
-
-        Log.d("SIP", "Llamada recibida");
-        try {
-            SipAudioCall.Listener listener = new SipAudioCall.Listener() {
-                @Override
-                public void onRinging(SipAudioCall call, SipProfile caller) {
-                    try {
-                        call.answerCall(30);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            };
-            call = mSipManager.takeAudioCall(intent, listener);
-            call.answerCall(30);
-            call.startAudio();
-            call.setSpeakerMode(true);
-            if(incomingCall.isMuted()) {
-                incomingCall.toggleMute();
-            }
-            appView.sendJavascript("cordova.fireWindowEvent('incommingCall', {})");
-        } catch (Exception e) {
-            if (call != null) {
-                call.close();
-            }
-        }
-    }
-  }
-            */
-
   public SIPReceiver callReceiver = null;
 
   public SIP() {
@@ -191,7 +156,6 @@ public class SIP extends CordovaPlugin {
     public void onCallBusy(SipAudioCall call) {
       Log.d("SIP", "onCallBusy - call");
       Log.d("SIP", Integer.toString(call.getState()));
-      setSpeakerMode();
       appView.sendJavascript("cordova.fireWindowEvent('callEnd', {})");
     }
 

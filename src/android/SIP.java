@@ -13,6 +13,7 @@ import org.json.JSONObject;
 import java.io.*;
 import java.util.Iterator;
 import java.util.Set;
+import java.lang.Thread;
 
 import android.os.Bundle;
 import android.net.Uri;
@@ -156,7 +157,7 @@ public class SIP extends CordovaPlugin {
     public void onCallBusy(SipAudioCall call) {
       Log.d("SIP", "onCallBusy - call");
       Log.d("SIP", Integer.toString(call.getState()));
-      appView.sendJavascript("cordova.fireWindowEvent('callEnd', {})");
+      appView.sendJavascript("cordova.fireWindowEvent('callBusy', {})");
     }
 
     @Override
@@ -187,7 +188,7 @@ public class SIP extends CordovaPlugin {
     @Override
     public void onCallBusy(SipSession session) {
       Log.d("SIP", "onCallBusy - session");
-      appView.sendJavascript("cordova.fireWindowEvent('callEnd', {})");
+      appView.sendJavascript("cordova.fireWindowEvent('callBusy', {})");
     }
 
     @Override
@@ -330,14 +331,24 @@ public class SIP extends CordovaPlugin {
       public void run() {
         if (call == null) {
           try {
+
+            Log.d("SIP", "Inicio");
+            Log.d("SIP", mSipManager.toString());
+            Log.d("SIP", mSipProfile.toString());
             SipSession session = mSipManager.createSipSession(mSipProfile, sessionListener);
+            Log.d("SIP", "session");
             SipProfile.Builder builder = new SipProfile.Builder("sip:" + number + "@" + mSipProfile.getSipDomain() + ";user=phone");
+            Log.d("SIP", "builder");
 
             SipProfile peerProfile = builder.build();
+            Log.d("SIP", "peerProfile");
 
             call = new SipAudioCall(mContext, mSipProfile);
+            Log.d("SIP", "SipAudioCall");
             call.setListener(listener);
+            Log.d("SIP", "listener");
             call.makeCall(peerProfile, session, 10);
+            Log.d("SIP", "makeCall");
             //call = mSipManager.makeAudioCall(mSipProfile.getUriString(), "sip:" + number + "@" + mSipProfile.getSipDomain() + ";user=phone", listener, 30);
             callbackContext.success("Llamada enviada");
           }

@@ -4,10 +4,11 @@ function SIP() {
 }
 
 SIP.prototype.connect = function(arg0, arg1, arg2, arg3, success, error) {
-    exec(success, error, "SIP", "connect", [arg0, arg1, arg2]);
+    exec(success, error, "SIP", "connect", [arg0, arg1, arg2, arg3]);
 };
 
 SIP.prototype.makeCall = function(arg0, success, error) {
+    arg0 = arg0.trim().replace(/\.| /g, '');
     exec(success, error, "SIP", "makecall", [arg0]);
 };
 

@@ -3,6 +3,10 @@ var exec = require('cordova/exec');
 function SIP() {
 }
 
+SIP.prototype.isSupported = function(success, error) {
+    exec(success, error, "SIP", "issupported", []);
+};
+
 SIP.prototype.connect = function(arg0, arg1, arg2, arg3, success, error) {
     exec(success, error, "SIP", "connect", [arg0, arg1, arg2, arg3]);
 };

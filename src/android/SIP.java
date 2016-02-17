@@ -142,7 +142,7 @@ public class SIP extends CordovaPlugin {
 
     @Override
     public void onCallEstablished(SipAudioCall call) {
-        stopRingbackTone();
+        stopTone();
         call.startAudio();
         appView.sendJavascript("cordova.fireWindowEvent('callEstablished', {})");
     }
@@ -158,7 +158,16 @@ public class SIP extends CordovaPlugin {
       Log.d("SIP", "onCallBusy - call");
       Log.d("SIP", Integer.toString(call.getState()));
       appView.sendJavascript("cordova.fireWindowEvent('callBusy', {})");
-    }
+      startBusyTone();
+
+      new android.os.Handler().postDelayed(
+        new Runnable() {
+            public void run() {
+              stopTone();
+            }
+        }, 
+        3000);
+      }
 
     @Override
     public void onCallEnded(SipAudioCall call) {
@@ -216,6 +225,25 @@ public class SIP extends CordovaPlugin {
     }
 
   };
+
+  private void isSupported(final CallbackContext callbackContext) {
+
+    cordova.getThreadPool().execute(new Runnable() {
+
+      public void run() {
+        mContext = cordova.getActivity();
+
+        mSipManager = SipManager.newInstance(mContext);
+
+        if (mSipManager.isVoipSupported(mContext)) {
+          callbackContext.success("OK");
+        }
+        else {
+          callbackContext.success("KO");
+        }
+      }
+    });
+  }
 
   private void connectSip(final String tel, final String user, final String pass, final String domain, final CallbackContext callbackContext) {
 
@@ -439,7 +467,7 @@ public class SIP extends CordovaPlugin {
 
       public void run() {
 
-        stopRingbackTone();
+        stopTone();
         StopRingtone();
         setSpeakerMode();
 
@@ -517,14 +545,58 @@ public class SIP extends CordovaPlugin {
       }
   }
 
-  private synchronized void startRingbackTone() {
-      setInCallMode();
+  private synchronized void startBusyTone() {
+      //setInCallMode();
+      AudioManager am =  ((AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE));
+      am.setMode(AudioManager.MODE_IN_COMMUNICATION);
+      Log.d("SIP", "Speaker[]: " + am.isSpeakerphoneOn());
+      if (am.isSpeakerphoneOn()) {
+        am.setSpeakerphoneOn(false);
+      }
+      Log.d("SIP", "Speaker[]: " + am.isSpeakerphoneOn());
+
+
+
       if (mRingbackTone == null) {
           // The volume relative to other sounds in the stream
-          int toneVolume = 80;
+          int toneVolume = 100;
           mRingbackTone = new ToneGenerator(
                   AudioManager.STREAM_MUSIC, toneVolume);
       }
+
+      am.setStreamVolume(AudioManager.STREAM_MUSIC, am.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
+
+      if (mRingbackTone.startTone(ToneGenerator.TONE_CDMA_NETWORK_BUSY)) {
+        Log.d("SIP", "Tono iniciado");
+      }
+      else {
+        Log.d("SIP", "Tono no iniciado");
+      }
+
+  }
+
+
+  private synchronized void startRingbackTone() {
+      //setInCallMode();
+      AudioManager am =  ((AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE));
+      am.setMode(AudioManager.MODE_IN_COMMUNICATION);
+      Log.d("SIP", "Speaker[]: " + am.isSpeakerphoneOn());
+      if (am.isSpeakerphoneOn()) {
+        am.setSpeakerphoneOn(false);
+      }
+      Log.d("SIP", "Speaker[]: " + am.isSpeakerphoneOn());
+
+
+
+      if (mRingbackTone == null) {
+          // The volume relative to other sounds in the stream
+          int toneVolume = 100;
+          mRingbackTone = new ToneGenerator(
+                  AudioManager.STREAM_MUSIC, toneVolume);
+      }
+
+      am.setStreamVolume(AudioManager.STREAM_MUSIC, am.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
+
       if (mRingbackTone.startTone(ToneGenerator.TONE_SUP_RINGTONE)) {
         Log.d("SIP", "Tono iniciado");
       }
@@ -534,7 +606,7 @@ public class SIP extends CordovaPlugin {
 
   }
 
-  private synchronized void stopRingbackTone() {
+  private synchronized void stopTone() {
       if (mRingbackTone != null) {
           mRingbackTone.stopTone();
           mRingbackTone.release();
@@ -595,6 +667,10 @@ public class SIP extends CordovaPlugin {
           String domain = args.getString(3);
 
           this.connectSip(tel, user, pass, domain, callbackContext);
+          return true;
+      }
+      else if (action.equals("issupported")) {
+          this.isSupported(callbackContext);
           return true;
       }
       else if (action.equals("makecall")) {

@@ -61,7 +61,7 @@ public class SIP extends CordovaPlugin {
 
   public static TelephonyManager telephonyManager = null;
 
-  private Intent incommingCallIntent = null;
+  private Intent incomingCallIntent = null;
   private PendingIntent pendingCallIntent = null;
   private Ringtone mRingtone = null;
 
@@ -88,7 +88,7 @@ public class SIP extends CordovaPlugin {
     dumpIntent(intent);
 
     if (intent.getAction().equals("com.javray.cordova.plugin.SIP.INCOMING_CALL")) {
-      appView.sendJavascript("cordova.fireWindowEvent('incommingCall', {})");
+      appView.sendJavascript("cordova.fireWindowEvent('incomingCall', {})");
     }
 
   }
@@ -299,7 +299,7 @@ public class SIP extends CordovaPlugin {
           mSipManager.open(mSipProfile, pendingCallIntent, null);
         }
         catch (SipException e) {
-          Log.d("SIP", "Cant open SIP Manager form incomming calls");
+          Log.d("SIP", "Cant open SIP Manager form incoming calls");
         }
       }
     });
@@ -394,17 +394,17 @@ public class SIP extends CordovaPlugin {
     });
   }
 
-  private void incommingCallSip(final CallbackContext callbackContext) {
+  private void incomingCallSip(final CallbackContext callbackContext) {
 
     cordova.getThreadPool().execute(new Runnable() {
       public void run() {
 
-        Log.d("SIP", "incommingCallSip");
+        Log.d("SIP", "incomingCallSip");
 
         Intent intent;
 
-        if (incommingCallIntent != null) {
-          intent = incommingCallIntent;
+        if (incomingCallIntent != null) {
+          intent = incomingCallIntent;
         }
         else {
           intent = cordova.getActivity().getIntent();
@@ -444,11 +444,11 @@ public class SIP extends CordovaPlugin {
     });
   }
 
-  private void incommingCallAnswerSip(final CallbackContext callbackContext) {
+  private void incomingCallAnswerSip(final CallbackContext callbackContext) {
     cordova.getThreadPool().execute(new Runnable() {
       public void run() {
 
-        Log.d("SIP", "incommingCallAnswerSip");
+        Log.d("SIP", "incomingCallAnswerSip");
 
         try {
             call.answerCall(10);
@@ -647,11 +647,11 @@ public class SIP extends CordovaPlugin {
         dumpIntent(intent);
 
         if (intent.getAction().equals("com.javray.cordova.plugin.SIP.INCOMING_CALL")) {
-          incommingCallIntent = intent;
-          appView.sendJavascript("cordova.fireWindowEvent('incommingCall', {})");
+          incomingCallIntent = intent;
+          appView.sendJavascript("cordova.fireWindowEvent('incomingCall', {})");
         }
         else {
-          incommingCallIntent = null;
+          incomingCallIntent = null;
         }
       }
     });
@@ -719,12 +719,12 @@ public class SIP extends CordovaPlugin {
           this.stopListenSIP();
           return true;
       }
-      else if (action.equals("incommingcall")) {
-          this.incommingCallSip(callbackContext);
+      else if (action.equals("incomingcall")) {
+          this.incomingCallSip(callbackContext);
           return true;
       }
       else if (action.equals("answercall")) {
-          this.incommingCallAnswerSip(callbackContext);
+          this.incomingCallAnswerSip(callbackContext);
           return true;
       }
 
